@@ -1,0 +1,67 @@
+<br />
+[% IF articles.count == 0 %]
+<p>No matching articles found</p>
+[% END %]
+<p>articles count = [% articles.count %]</p>
+[% WHILE ( article = articles.next ) %]
+	<div class="post">
+	[% url = '/' _ c.ravlog_txt_to_url(article.subject, article.id) _ '/view' %]
+	<div class="post-info">
+		<h2 class="post-title">
+			<a title="[% c.uri_for(url) %]" href="[% url %]">[% article.subject %]</a>
+		</h2>
+		<a href="[% c.base_uri %]/feed/comments/[% c.ravlog_txt_to_url(article.subject) %]"><img src="/static/images/rss.png" alt="RSS" /></a> &nbsp;
+      <br/>
+		<span>Posted by [% article.user.username %]&nbsp;&nbsp;&nbsp;</span>
+      <p class="post-date"> 
+         [% c.render_ravlog_date(article.created_at) %]
+      </p>
+	</div>
+	
+	<div class="post-content">
+		[% article.formatted_body %]
+	</div>
+	<div class="post-footer">&nbsp;
+      [% IF article.tags %]
+		<span>Tags:</span>
+		[% FOREACH tag = article.tags %] 
+			<a href="/tag/[% c.ravlog_txt_to_url(tag.name) %]">[% tag.name %]</a>
+		[% END %]
+      [% END %]
+		&nbsp;&nbsp;<a href="[% url %]">[[% article.comments_rs.count %]] comments</a>
+   </div>
+	</div>
+	<br />
+   <br />
+[% END %]
+<div id="comments"></div>
+
+<ol class="commentlist">
+[% FOREACH comment = comments %]
+	<li class="alt">
+	[% IF loop.index % 2 %]
+   	<div class="comment">
+    [% ELSE %]
+	<div class="comment_alt">
+    [% END %]
+    [% IF comment.user %] 
+    [% SET url = comment.user.website; SET name = comment.user.username; %]
+    [% ELSE %]
+    [% SET url = comment.url; SET name = comment.name; %]
+    [% END %]
+	<h3><a title="[% url %]" href="[% url %]">[% name %]</a></h3>
+	<small class="commentmetadata">Posted [% c.render_ravlog_date(comment.created_at) %]</small>
+	<p>[% comment.formatted_body %]</p>
+	</div>
+	</li>
+[% END %]
+</ol>
+
+[% IF comment_form %]
+<h3 id="respond">Comment</h3>
+[% comment_form.render %]
+[% IF never %]
+<p>Type the following in the verification box</p>
+<img src="/submit/captcha" alt="" />
+[% END %]
+[% END %]
