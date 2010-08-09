@@ -10,6 +10,22 @@
     connect_info => [
         'dbi:SQLite:dbname=./nblog.db',
     ],
+  },
+  'renderer' => {
+    root         => 'templates',
+    PRE_PROCESS  => 'site/config.tt',
+    WRAPPER      => 'site/wrapper.tt',
+    VARIABLES    => { 
+        c => {
+            config => {
+                site => {
+                    name => 'Writers Unite!',
+                    template => 'default',
+                    description => 'a writers blog',
+                }
+            }
+        }
+    }
   }
 }
 
