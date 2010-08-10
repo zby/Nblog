@@ -14,10 +14,10 @@
    DEFAULT 
      site = { 
 		     title     => c.config.site.name,
-				layout => c.config.site.template _ '/layout.tt',
-				stylesheets => 'templates/' _ c.config.site.template _ '/static/stylesheets',
-				javascripts => 'templates/' _ c.config.site.template _ '/static/javascripts'
-				images => 'templates/' _ c.config.site.template _ '/static/images'
+				layout => '/layout.tt',
+				stylesheets => 'static/stylesheets',
+				javascripts => 'static/javascripts'
+				images => 'static/images'
 			};
 						
 			MACRO ravlog_define_headers
@@ -56,7 +56,7 @@
 			
 			MACRO load_file ( file )
 			BLOCK;
-				 c.config.site.template _ '/' _ file;
+				 file;
 			END;
 			
 			MACRO sh_js_include

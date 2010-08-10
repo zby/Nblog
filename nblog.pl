@@ -16,15 +16,8 @@
     PRE_PROCESS  => 'site/config.tt',
     WRAPPER      => 'site/wrapper.tt',
     VARIABLES    => { 
-        c => {
-            config => {
-                site => {
-                    name => 'Writers Unite!',
-                    template => 'default',
-                    description => 'a writers blog',
-                }
-            }
-        }
+        site_name => 'Writers Unite!',
+        sidebar   => 1,
     }
   }
 }

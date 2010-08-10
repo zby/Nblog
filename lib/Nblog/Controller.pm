@@ -1,15 +1,16 @@
 use strict;
 use warnings;
 
-package DvdDatabase::Controller;
+package Nblog::Controller;
 
 use base 'WebNano::Controller';
 
 sub index_action {
     my $self = shift;
-    my $articles = $self->schema->resultset('DB::Article')->get_latest_articles();
+    my $articles = $self->application->schema->resultset('Nblog::Schema::Result::Article')->get_latest_articles();
     my $out = '';
-    $self->render( template => 'blog_index.tt', vars => { articles => $articles }, output => \$out );
-    return $out;
+    return $self->render( 'blog_index.tt', { articles => $articles } );
 }
+
+1;
 

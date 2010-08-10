@@ -9,7 +9,7 @@
 	<meta http-equiv="imagetoolbar" content="no" />
 	<meta name="MSSmartTagsPreventParsing" content="true" />
 			
-	<link rel="alternate" type="application/rss+xml" title="[% c.config.name %]" href="/feed/articles" />
+	<link rel="alternate" type="application/rss+xml" title="[% site_name %]" href="/feed/articles" />
    <script type="text/javascript" src="/static/js/jquery.js"></script>
 
 	[% ravlog_define_headers %]
@@ -26,7 +26,7 @@
 			<div id="tabs">
 				<div class="body_padding" style="float: left;">
 					<div style="padding-top: 0px; padding-bottom: 10px;">
-					<h1>[% c.config.site.name %]</span></h1>
+					<h1>[% site_name %]</span></h1>
 					</div>
 				</div>
 				<br class="clear"/>

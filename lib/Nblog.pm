@@ -6,16 +6,20 @@ use Moose;
 use MooseX::NonMoose;
 use Moose::Util::TypeConstraints;
 
+use Plack::Request;
+
 extends 'WebNano';
 use Nblog::Schema;
 use WebNano::Renderer::TT;
 
 with 'MooseX::SimpleConfig';
 
+has '+configfile' => ( default => 'nblog_local.pl' );
+
 subtype 'Nblog::Schema::Connected' => as class_type( 'Nblog::Schema' );
 coerce 'Nblog::Schema::Connected'
     => from 'HashRef' 
-        => via { Nblog::Schema->connect( $_->{connect_info} ) };
+        => via { Nblog::Schema->connect( @{ $_->{connect_info} } ) };
 
 has schema => ( is => 'ro', isa => 'Nblog::Schema::Connected', coerce => 1 );
 
