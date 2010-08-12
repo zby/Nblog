@@ -7,6 +7,8 @@ use MooseX::NonMoose;
 use Moose::Util::TypeConstraints;
 
 use Plack::Request;
+use HTML::CalendarMonthSimple;
+use DateTime;
 
 extends 'WebNano';
 use Nblog::Schema;
@@ -47,7 +49,38 @@ around handle => sub {
             }
         }
     }
+    $env->{calendar} = $self->calendar();
+
     $self->$orig( $env, @_ );
 };
+
+sub calendar {
+   my ( $self ) = @_;
+
+   my $dt  = DateTime->now();
+   my $cal = new HTML::CalendarMonthSimple(
+      'year'  => $dt->year,
+      'month' => $dt->month
+   );
+   $cal->border(0);
+   $cal->width(50);
+   $cal->headerclass('month_date');
+   $cal->showweekdayheaders(0);
+
+   my @articles = $self->schema->resultset('Article')->from_month( $dt->month );
+
+   foreach my $article (@articles)
+   {
+      my $location =
+           '/archived/'
+         . $article->created_at->year() . '/'
+         . $article->created_at->month() . '/'
+         . $article->created_at->mday();
+      $cal->setdatehref( $article->created_at->mday(), $location );
+   }
+
+   return $cal->as_HTML;
+}
+
 
 1;
