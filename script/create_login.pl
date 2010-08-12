@@ -7,12 +7,17 @@ use Config::Any::Perl;
 
 my $cfg = Config::Any::Perl->load('nblog_local.pl');
 
-my $db = Nblog::Schema->connect($cfg->{'Nblog::Schema'}->{connect_info}[0]);
+my $db = Nblog::Schema->connect($cfg->{'schema'}->{connect_info}[0]);
 
 if(!defined $db) {
 	print "Can't connect to database!\n";
 	exit(0);
 }
+
+my $user = $db->resultset('User')->new({});
+$user->username('test');
+$user->password('pass_for_test');
+$user->insert();
 
 $username = question('user name');
 $password = question('password');

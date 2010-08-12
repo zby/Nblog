@@ -41,8 +41,8 @@ around handle => sub {
     }
     else{
         my $req = Plack::Request->new( $env );
-        if( $req->param( 'login' ) && $req->param( 'password' ) ){
-            my $user = $self->schema->resultset( 'User' )->search( { username => $req->param( 'login' ) } )->first;
+        if( $req->param( 'username' ) && $req->param( 'password' ) ){
+            my $user = $self->schema->resultset( 'User' )->search( { username => $req->param( 'username' ) } )->first;
             if( $user->check_password( $req->param( 'password' ) ) ){
                 $env->{user} = $user;
                 $env->{'psgix.session'}{user_id} = $user->id;

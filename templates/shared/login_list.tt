@@ -1,10 +1,17 @@
 <h2>Meta</h2>
+[% IF c.env.user %]
 <ul>
-[% IF c.user %]
-<li><span>Logged in as: [% c.user.username %]</span></li>
+<li><span>Logged in as: [% c.env.user.username %]</span></li>
 <li><a href="/admin">Site-Admin</a></li>
 <li><a href="/logout">Logout</a></li>
-[% ELSE %]
-<li><a href="/admin">Login</a></li>
-[% END %]
 </ul>
+[% ELSE %]
+<form id="login_form" method="post" > 
+<fieldset class="main_fieldset"> 
+ <div><label class="label" for="username">Username: </label><input type="text" name="username" id="username" value="" /></div> 
+ <div><label class="label" for="password">Password: </label><input type="password" name="password" id="password" value="" /></div> 
+ <div><label class="label" for="remember">Remember: </label><input type="checkbox" name="remember" id="remember" value="1" /></div> 
+ <div><input type="submit" name="submit" id="submit" value="Login" /></div> 
+</fieldset>
+</form> 
+[% END %]

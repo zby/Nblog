@@ -5,7 +5,7 @@ use warnings;
 
 use base 'DBIx::Class';
 
-__PACKAGE__->load_components( "Core" );
+__PACKAGE__->load_components( 'EncodedColumn', "Core" );
 __PACKAGE__->table("users");
 __PACKAGE__->add_columns(
    "user_id",
@@ -28,6 +28,11 @@ __PACKAGE__->add_columns(
       default_value => undef,
       is_nullable   => 1,
       size          => 255,
+      encode_column => 1,
+      encode_class  => 'Digest',
+      encode_args   => {algorithm => 'SHA-1', format => 'hex', salt_length => 10},
+      encode_check_method => 'check_password',
+
    },
    "website",
    {
