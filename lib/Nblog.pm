@@ -50,6 +50,7 @@ around handle => sub {
         }
     }
     $env->{calendar} = $self->calendar();
+    $env->{archives} = $self->archives();
 
     $self->$orig( $env, @_ );
 };
@@ -81,6 +82,81 @@ sub calendar {
 
    return $cal->as_HTML;
 }
+
+sub ravlog_txt_to_url {
+    my $self = shift;
+
+    my ( $txt, $id ) = @_;
+
+    $txt =~ s/(\'|\!|\`|\?)//g;
+    $txt =~ s/ /\_/g;
+
+    return $txt;
+}
+sub render_ravlog_date {
+    my $self = shift;
+    my $date = shift;
+    my $dt = $self->datetime_to_ravlog_time($date);
+    my $output = "<span class=\"ravlog_date\" title=\""
+      . $dt
+      . "\">$dt</span>";
+    return $output;
+}
+
+sub datetime_to_ravlog_time {
+    my $self = shift;
+
+    my ($d) = shift;
+    my $ext =
+        $d->day_abbr() . ", "
+      . $d->day() . " "
+      . $d->month_abbr() . " "
+      . $d->year() . " "
+      . $d->hour . ":"
+      . $d->minute . ":"
+      . $d->second();
+    return $ext;
+}
+
+
+sub archives
+{
+   my ( $self ) = @_;
+
+   my @articles = $self->schema->resultset('Article')->all();
+
+   unless (@articles)
+   {
+      return "<p>No Articles in Archive!</p>";
+   }
+
+   my $months;
+   foreach my $article (@articles)
+   {
+      my $month = $article->created_at()->month_name();
+      my $year  = $article->created_at()->year();
+      my $key   = "$year $month";
+      if ( ( defined $months->{$key}->{count} ) && ( $months->{$key}->{count} > 0 ) )
+      {
+         $months->{$key}->{count} += 1;
+      }
+      else
+      {
+         $months->{$key}->{count} = 1;
+         $months->{$key}->{year}  = $year;
+         $months->{$key}->{month} = $article->created_at()->month();
+      }
+   }
+
+   my @out;
+   while ( my ( $key, $value ) = each( %{$months} ) )
+   {
+      push @out,
+         "<li><a href='/archived/$value->{year}/$value->{month}'>$key</a> <span class='special_text'>($value->{count})</span></li>";
+   }
+   return join( ' ', @out );
+}
+
 
 
 1;

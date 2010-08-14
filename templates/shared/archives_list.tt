@@ -1,4 +1,4 @@
 <h2>Archives</h2>
 <ul>
-[% archives %]
+[% c.env.archives %]
 </ul>
