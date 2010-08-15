@@ -5,7 +5,7 @@
 <p>articles count = [% articles.count %]</p>
 [% WHILE ( article = articles.next ) %]
 	<div class="post">
-	[% url = '/' _ c.application.ravlog_txt_to_url(article.subject, article.id) _ '/view' %]
+	[% url = '/Article/' _ c.application.ravlog_txt_to_url(article.subject, article.id) _ '/view' %]
 	<div class="post-info">
 		<h2 class="post-title">
 			<a title="[% c.uri_for(url) %]" href="[% url %]">[% article.subject %]</a>

@@ -157,6 +157,16 @@ sub archives
    return join( ' ', @out );
 }
 
+sub ravlog_url_to_query {
+    my $self = shift;
+
+    my ($txt) = shift;
+
+    $txt =~ s/\_/ /g;
+    $txt =~ s/s /\%/g;
+    return ( "%" . $txt . "%" );
+}
+
 
 
 1;
