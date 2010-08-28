@@ -8,8 +8,7 @@ isa_ok( $app->renderer, 'WebNano::Renderer::TT', 'renderer created' );
 my $articles = $app->schema->resultset('Nblog::Schema::Result::Article')->get_latest_articles();
 ok( $articles->count, 'Articles found' );
 
-my $out;
-$app->renderer->render( template => 'blog_index.tt', vars => { articles => $articles }, output => \$out );
+my $out = $app->renderer->render( template => 'blog_index.tt', articles => $articles );
 warn $out;
 
 done_testing;

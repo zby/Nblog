@@ -39,12 +39,12 @@ sub view_action {
         schema => $self->application->schema,
     );
     $form->process( params => $self->request->parameters->as_hashref );
-    return $self->render( 'blog_view.tt', {
+    return $self->render( 
+        template => 'blog_view.tt',
             article => $self->article,
             title   => $self->article->subject,
             comments => [ $self->article->comments->all ],
             comment_form => $form,
-        }
     );
 }
 
