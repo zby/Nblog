@@ -11,5 +11,18 @@ sub index_action {
     return $self->render( template => 'blog_index.tt', articles => $articles );
 }
 
+sub logout_action {
+    my $self = shift;
+    my $req = $self->request;
+    if( $req->param( 'logout' ) ){
+        delete $self->env->{'psgix.session'}{user_id};
+    }
+    my $res = $req->new_response();
+    $res->redirect( '/' );
+    return $res;
+}
+
+
+
 1;
 
