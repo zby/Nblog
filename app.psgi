@@ -10,6 +10,7 @@ builder {
         path => qr{^/static/}, root => './templates/globals/';
     enable "Plack::Middleware::Static",
         path => qr{^/favicon.ico$}, root => './templates/globals/static/images/';
+    enable 'Session';
     $app->psgi_callback;;
 };
 

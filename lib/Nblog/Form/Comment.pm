@@ -63,7 +63,9 @@ before 'set_active' => sub {
 
 after 'update_model' => sub {
     my $self = shift;
-    $self->item->update( { article_id => $self->article_id, remote_ip => $self->remote_ip } );
+    my %update = ( article_id => $self->article_id, remote_ip => $self->remote_ip );
+    $update{user_id} = $self->user->id if $self->user;
+    $self->item->update( \%update );
 };
 
 no HTML::FormHandler::Moose;
