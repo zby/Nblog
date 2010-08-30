@@ -13,6 +13,8 @@
   },
   'renderer' => {
     root         => 'templates',
+    TEMPLATE_EXTENSION => 'tt',
+    INCLUDE_PATH => 'templates',
     PRE_PROCESS  => 'site/config.tt',
     WRAPPER      => 'site/wrapper.tt',
     VARIABLES    => { 

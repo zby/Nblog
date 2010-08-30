@@ -1,0 +1,27 @@
+[% PROCESS Admin/nav.tt %]
+
+<h3>Recent Articles</h3>
+<table border="1" cellpadding="3" cellspacing="0"> 
+<th>Id</th>
+<th>Subject</th>
+<th>Clear Cache</th>
+<th>View</th>
+<th>Edit</th>
+<th>Delete</th>
+
+
+[% WHILE (article = articles.next) %]
+
+<tr>
+<td id="id" class="">[% article.id %]</td>
+<td class="" id='subject'>[% article.subject %]</td>
+<td id="cache" class=""><a href="javascript:clear_cache(4);">Clear Cache</a></td>
+<td id="view" class=""><a href="/admin/article/[% article.id %]/view">View</a></td>
+<td id="edit" class=""><a href="/admin/article/[% article.id %]/edit">Edit</a></td>
+<td id="delete" class=""><a href="/admin/article/[% article.id %]/delete">Delete</a></td>
+</tr>
+
+[% END %]
+
+</table>
+

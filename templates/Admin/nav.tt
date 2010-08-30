@@ -1,0 +1,10 @@
+<div id="[% tabnavid %]">
+   <ul id="tabnav">
+      <li id="tab1"><a href="/admin/article/create">Create</a></li>
+      <li id="tab2"><a href="/admin/article/list">Articles</a></li>
+      <li id="tab3"><a href="/admin/user/list">Users</a></li>
+      <li id="tab4"><a href="/admin/tag/list">Tags</a></li>
+      <li id="tab5"><a href="/admin/page/list">Pages</a></li>
+      <li id="tab6"><a href="/admin/link/list">Links</a></li>
+   </ul>
+</div>
