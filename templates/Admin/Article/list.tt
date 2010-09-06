@@ -10,15 +10,15 @@
 <th>Delete</th>
 
 
-[% WHILE (article = articles.next) %]
+[% FOR article IN items %]
 
 <tr>
 <td id="id" class="">[% article.id %]</td>
 <td class="" id='subject'>[% article.subject %]</td>
 <td id="cache" class=""><a href="javascript:clear_cache(4);">Clear Cache</a></td>
-<td id="view" class=""><a href="/admin/article/[% article.id %]/view">View</a></td>
-<td id="edit" class=""><a href="/admin/article/[% article.id %]/edit">Edit</a></td>
-<td id="delete" class=""><a href="/admin/article/[% article.id %]/delete">Delete</a></td>
+<td id="view" class=""><a href="/Admin/Article/[% article.id %]/view">View</a></td>
+<td id="edit" class=""><a href="/Admin/Article/[% article.id %]/edit">Edit</a></td>
+<td id="delete" class=""><a href="/Admin/Article/[% article.id %]/delete">Delete</a></td>
 </tr>
 
 [% END %]

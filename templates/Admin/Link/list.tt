@@ -1,0 +1,25 @@
+[% PROCESS Admin/nav.tt %]
+<h3>Links</h3>
+
+<p>
+  <a href="/Admin/Link/create') %]">Create Link</a>
+</p>
+
+<table border="1" cellpadding="3" cellspacing="0"> 
+<th>Name</th>
+<th>Edit</th>
+<th>Delete</th>
+
+
+[% FOREACH link IN items %]
+
+<tr>
+<td id="name" class="">[% link.name %]</td>
+<td id="edit" class=""><a href="/Admin/Link/[% link.id %]/edit">Edit</a></td>
+<td id="delete" class=""><a href="/Admin/Link/[% link.id %]/delete">Delete</a></td>
+</tr>
+
+[% END %]
+
+</table>
+  

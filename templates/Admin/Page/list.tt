@@ -1,0 +1,25 @@
+[% PROCESS Admin/nav.tt %]
+<h3>Page list</h3>
+
+<p>
+  <a href="/Admin/Page/create">Create Page</a>
+</p>
+
+<table border="1" cellpadding="3" cellspacing="0"> 
+<th>Name</th>
+<th>Edit</th>
+<th>Delete</th>
+
+[% FOREACH page IN items %]
+
+<tr>
+<td id="name" class="">[% page.name %]</td>
+<td id="edit" class=""><a href="/Admin/Page/[% page.id %]/edit">Edit</a></td>
+<td id="delete" class=""><a href="/Admin/Page/[% page.id %]/delete">Delete</a></td>
+</tr>
+
+[% END %]
+
+</table>
+  
+

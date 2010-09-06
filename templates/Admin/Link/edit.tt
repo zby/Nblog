@@ -1,3 +1,4 @@
 [% PROCESS Admin/nav.tt %]
-<p><b>Edit article</b></p>
+<h1>Edit Link</h1>
+
 [% form %]

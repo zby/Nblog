@@ -3,20 +3,10 @@ use warnings;
 
 package Nblog::Controller::Admin::Article;
 use Moose;
-use MooseX::NonMoose;
 
-extends 'WebNano::Controller';
+extends 'WebNano::Controller::CRUD';
 
-use Nblog::Form::Article;
-
-sub list_action {
-    my ( $self ) = @_;
-    return $self->render( 
-        articles => $self->application->schema->resultset('Article'),
-        tabnavid => 'tabnav2' 
-    );
-}
-
+has '+form_class' => ( default => 'Nblog::Form::Article' );
 
 
 1;

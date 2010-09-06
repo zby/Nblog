@@ -26,7 +26,7 @@ has_field 'body' => (
       rows     => 20,
       cols     => 40,
 );
-has_field '_submit' => ( 
+has_field 'submit' => ( 
       type => 'Submit',
       id => '_submit',
       value => 'Save' 

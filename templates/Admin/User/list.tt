@@ -1,0 +1,25 @@
+[% PROCESS Admin/nav.tt %]
+<h3>Users</h3>
+<p>
+  <a href="/Admin/User/create') %]">Create User</a>
+</p>
+
+<table border="1" cellpadding="3" cellspacing="0"> 
+<th>User Name</th>
+<th>Email</th>
+<th>Edit</th>
+<th>Delete</th>
+
+[% FOR user IN items %]
+
+<tr>
+<td id="name" class="">[% user.username %]</td>
+<td id="name" class="">[% user.email %]</td>
+<td id="edit" class=""><a href="/Admin/User/[% user.id %]/edit">Edit</a></td>
+<td id="delete" class=""><a href="/Admin/User/[% user.id %]/delete">Delete</a></td>
+</tr>
+
+[% END %]
+
+</table>
+  

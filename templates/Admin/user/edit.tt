@@ -1,4 +1,0 @@
-[% PROCESS admin/nav.tt %]
-<h1>Edit User</h1>
-
-[% form.render %]
