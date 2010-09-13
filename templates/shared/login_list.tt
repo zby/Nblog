@@ -2,7 +2,7 @@
 [% IF c.env.user %]
 <ul>
 <li><span>Logged in as: [% c.env.user.username %]</span></li>
-<li><a href="/admin">Site-Admin</a></li>
+<li><a href="/Admin">Site-Admin</a></li>
 <li><form id="logout_form" method="post" action="/logout"><input type="hidden" name="logout" value="1"><input type="submit" name="submit" id="submit" value="Logout" /></form>
 </ul>
 [% ELSE %]

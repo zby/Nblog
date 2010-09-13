@@ -1,0 +1,6 @@
+[% PROCESS Admin/nav.tt %]
+<h1>View Article</h1>
+
+<h2>[% record.subject %]</h2>
+
+<p>[% record.formatted_body %]</p>

@@ -1,6 +1,0 @@
-[% PROCESS admin/nav.tt %]
-<h1>View Article</h1>
-
-<h2>[% article.subject %]</h2>
-
-<p>[% article.formatted_body %]</p>
