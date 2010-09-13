@@ -22,6 +22,8 @@ sub archived
       $lastday = DateTime->last_day_of_month( year => $year, month => $month )->day;
 
    }
+   $month = sprintf '%.2x', $month;
+   $day   = sprintf '%.2x', $day;
    return $self->search(
      {
         created_at => {

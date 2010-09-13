@@ -22,6 +22,16 @@ sub logout_action {
     return $res;
 }
 
+sub archived_action {
+    my ( $self, $year, $month, $day ) = @_;
+
+    my $articles = $self->application->schema->resultset('Article')->archived( $year, $month, $day );
+    return $self->render( 
+        template => 'blog_index.tt',
+        articles => $articles,
+    );
+}
+
 
 
 1;
