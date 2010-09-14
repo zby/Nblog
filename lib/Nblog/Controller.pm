@@ -7,13 +7,13 @@ use base 'WebNano::Controller';
 
 sub index_action {
     my $self = shift;
-    my $articles = $self->application->schema->resultset('Nblog::Schema::Result::Article')->get_latest_articles();
+    my $articles = $self->app->schema->resultset('Nblog::Schema::Result::Article')->get_latest_articles();
     return $self->render( template => 'blog_index.tt', articles => $articles );
 }
 
 sub logout_action {
     my $self = shift;
-    my $req = $self->request;
+    my $req = $self->req;
     if( $req->param( 'logout' ) ){
         delete $self->env->{'psgix.session'}{user_id};
     }
@@ -25,7 +25,7 @@ sub logout_action {
 sub archived_action {
     my ( $self, $year, $month, $day ) = @_;
 
-    my $articles = $self->application->schema->resultset('Article')->archived( $year, $month, $day );
+    my $articles = $self->app->schema->resultset('Article')->archived( $year, $month, $day );
     return $self->render( 
         template => 'blog_index.tt',
         articles => $articles,

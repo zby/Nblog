@@ -16,11 +16,11 @@ around handle => sub {
     my ( $orig, $class, %args ) = @_;
     my $path = delete $args{path};
     my( $path_part, $new_path ) = ( $path =~ qr{^([^/]*)/?(.*)} );
-    my $application = $args{application};
+    my $app = $args{app};
     my $title = uri_unescape( $path_part );
     $args{article} = 
-          $application->schema->resultset('Article')
-                ->search( { 'subject' => { like => $application->ravlog_url_to_query($title) } } )->first;
+          $app->schema->resultset('Article')
+                ->search( { 'subject' => { like => $app->ravlog_url_to_query($title) } } )->first;
     $args{path} = $new_path;
     $args{self_url} = $args{self_url} . $title;
     $class->$orig( %args );
@@ -36,9 +36,9 @@ sub view_action {
         user => $self->env->{user},
         article_id => $self->article->id, 
         remote_ip => $self->env->{remote_ip},
-        schema => $self->application->schema,
+        schema => $self->app->schema,
     );
-    $form->process( params => $self->request->parameters->as_hashref );
+    $form->process( params => $self->req->parameters->as_hashref );
     return $self->render( 
         template => 'blog_view.tt',
             article => $self->article,
