@@ -22,8 +22,9 @@ sub archived
       $lastday = DateTime->last_day_of_month( year => $year, month => $month )->day;
 
    }
-   $month = sprintf '%.2x', $month;
-   $day   = sprintf '%.2x', $day;
+   $day   = sprintf '%02d', $day;
+   $lastday   = sprintf '%02d', $lastday;
+   $month = sprintf '%02d', $month;
    return $self->search(
      {
         created_at => {
@@ -38,6 +39,8 @@ sub archived
 sub from_month
 {
    my ( $self, $month, $year ) = @_;
+   $day   = sprintf '%02d', $day;
+   $month = sprintf '%02d', $month;
 
    $year = DateTime->now()->year() unless defined $year;
 
@@ -46,7 +49,7 @@ sub from_month
    my $hour    = $dt->hour();
 
    return $self->search(
-      { created_at => { -between => [ "$year-$month-1", "$year-$month-$lastday" ] } },
+      { created_at => { -between => [ "$year-$month-01", "$year-$month-$lastday" ] } },
       { order_by   => 'article_id desc' } )->all();
 }
 

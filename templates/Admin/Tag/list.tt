@@ -2,7 +2,7 @@
 
 <h3>Tags</h3>
 <p>
-  <a href="/Admin/Tag/create') %]">Create Tag</a>
+  <a href="/Admin/Tag/create">Create Tag</a>
 </p>
 
 <table border="1" cellpadding="3" cellspacing="0"> 
