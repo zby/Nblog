@@ -1,4 +1,4 @@
 <h2>Archives</h2>
 <ul>
-[% c.env.archives %]
+[% c.app.archives %]
 </ul>

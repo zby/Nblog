@@ -49,11 +49,10 @@ around handle => sub {
             }
         }
     }
-    $env->{calendar} = $self->calendar();
-    $env->{archives} = $self->archives();
-
     $self->$orig( $env, @_ );
 };
+
+sub tags { shift->schema->resultset( 'Tag' )->all }
 
 sub calendar {
    my ( $self ) = @_;

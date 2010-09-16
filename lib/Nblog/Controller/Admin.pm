@@ -4,6 +4,7 @@ use warnings;
 package Nblog::Controller::Admin;
 use Moose;
 use MooseX::NonMoose;
+use Plack::Response;
 
 extends 'WebNano::Controller';
 
@@ -15,5 +16,12 @@ around 'local_dispatch' => sub {
     }
     $self->$orig( @_ );
 };
+
+sub index_action {
+    my $res = Plack::Response->new;
+    $res->redirect( '/Admin/Article/' );
+    return $res;
+}
+
 
 1;
