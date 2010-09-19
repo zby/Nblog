@@ -1,6 +1,6 @@
 <div id="sidebar">
 	<div id="search_pane">
-	<form action="/search" method="post">
+	<form action="/search">
 	<p>
 		<span>Search:</span>
 		<input type="text" name="phrase" size="20" onkeyup="check_articles(this);"/>

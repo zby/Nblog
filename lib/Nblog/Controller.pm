@@ -33,6 +33,27 @@ sub archived_action {
 }
 
 
+sub search_action {
+   my ( $self, $phrase ) = @_;
+
+   if ( !defined $phrase )
+   {
+      $phrase = $self->req->param( 'phrase' );
+   }
+
+   my $articles = $self->app->schema->resultset('Article')->search(
+      [
+         subject => { like => "%$phrase%" },
+         body    => { like => "%$phrase%" },
+      ]
+   );
+
+   return $self->render( 
+       template => 'blog_index.tt',
+       articles => $articles,
+   )
+}
+
 
 1;
 
