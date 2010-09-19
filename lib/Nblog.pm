@@ -18,6 +18,8 @@ with 'MooseX::SimpleConfig';
 
 has '+configfile' => ( default => 'nblog_local.pl' );
 
+has 'name' => ( is => 'ro', isa => 'Str' );
+
 subtype 'Nblog::Schema::Connected' => as class_type( 'Nblog::Schema' );
 coerce 'Nblog::Schema::Connected'
     => from 'HashRef' 
