@@ -1,10 +1,26 @@
-
 function toggle_tag_list() {
+    $('#alpha').bind( 'click', 
+        function(){ 
+            $('#alpha').addClass("selected");
+            $('#freq').removeClass("selected");
+            sort_tags('#alpha');
+        } 
+    );
+    $('#freq').bind( 'click', 
+        function(){ 
+            $('#freq').addClass("selected");
+            $('#alpha').removeClass("selected");
+            sort_tags('#freq');
+        } 
+    );
 }
 
-     
 function sort_tags(field) {
-   $.post('/ajax/sort_by',  {
-		content: { field: field.id }
-	});
+    $.post( '/Ajax/sort_by',  
+        { field: field },
+        function(data){
+            $('#tag_list').html(data);
+        }
+    );
 }
+
