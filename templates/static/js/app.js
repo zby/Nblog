@@ -24,3 +24,19 @@ function sort_tags(field) {
     );
 }
 
+function check_articles(field) {
+    if ((field.value.length > 0 && field.value.length < 3) || field.value.length==0 ) {
+        $('#search_board').css('display','none');
+        return;
+    }
+    $.post( '/Ajax/check_articles',  
+        { field: field.value },
+        function(data) {
+            $('#search_board').css( 'display', "block" );
+            $('#search_board').html( data );
+        }
+    );
+}
+
+
+
