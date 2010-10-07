@@ -10,6 +10,11 @@ use Plack::Request;
 use HTML::CalendarMonthSimple;
 use DateTime;
 
+use Plack::Middleware::Static;
+use Plack::Middleware::Session;
+use Plack::Session::Store::Cache;
+use CHI;
+
 extends 'WebNano';
 use Nblog::Schema;
 use WebNano::Renderer::TT;
@@ -172,5 +177,16 @@ sub pages {
    return shift->schema->resultset('Page')->search( display_in_drawer => 1 )->all();
 }
 
+
+override psgi_callback => sub {
+    my $app = super;
+    $app = Plack::Middleware::Static->wrap( $app, path => qr{^/static/}, root => './templates/' );
+    $app = Plack::Middleware::Static->wrap( $app, path => qr{^/favicon.ico$}, root => './templates/static/images/' );
+    $app = Plack::Middleware::Session->wrap( $app, store => Plack::Session::Store::Cache->new(
+            cache => CHI->new(driver => 'FastMmap')
+        )
+    );
+    return $app;
+};
 
 1;
