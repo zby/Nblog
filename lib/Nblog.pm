@@ -168,6 +168,9 @@ sub ravlog_url_to_query {
     return ( "%" . $txt . "%" );
 }
 
+sub pages {
+   return shift->schema->resultset('Page')->search( display_in_drawer => 1 )->all();
+}
 
 
 1;
