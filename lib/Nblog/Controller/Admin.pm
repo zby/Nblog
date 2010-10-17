@@ -6,7 +6,7 @@ use Moose;
 use MooseX::NonMoose;
 use Plack::Response;
 
-extends 'WebNano::Controller';
+extends 'WebNano::DirController';
 
 around 'local_dispatch' => sub {
     my $orig = shift;
