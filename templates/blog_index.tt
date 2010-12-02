@@ -5,16 +5,16 @@
 <p>articles count = [% articles.count %]</p>
 [% WHILE ( article = articles.next ) %]
 	<div class="post">
-	[% url = '/Article/' _ c.application.ravlog_txt_to_url(article.subject, article.id) _ '/view' %]
+	[% url = '/Article/' _ c.app.ravlog_txt_to_url(article.subject, article.id) _ '/view' %]
 	<div class="post-info">
 		<h2 class="post-title">
-			<a title="[% c.uri_for(url) %]" href="[% url %]">[% article.subject %]</a>
+			<a title="[% url %]" href="[% url %]">[% article.subject %]</a>
 		</h2>
-		<a href="[% c.base_uri %]/feed/comments/[% c.application.ravlog_txt_to_url(article.subject) %]"><img src="/static/images/rss.png" alt="RSS" /></a> &nbsp;
+		<a href="[% c.base_uri %]/feed/comments/[% url %]"><img src="/static/images/rss.png" alt="RSS" /></a> &nbsp;
       <br/>
 		<span>Posted by [% article.user.username %]&nbsp;&nbsp;&nbsp;</span>
       <p class="post-date"> 
-         [% c.application.render_ravlog_date(article.created_at) %]
+         [% c.app.render_ravlog_date(article.created_at) %]
       </p>
 	</div>
 	
@@ -25,7 +25,7 @@
       [% IF article.tags %]
 		<span>Tags:</span>
 		[% FOREACH tag = article.tags %] 
-			<a href="/tag/[% c.applicaiton.ravlog_txt_to_url(tag.name) %]">[% tag.name %]</a>
+			<a href="/tag/[% c.app.ravlog_txt_to_url(tag.name) %]">[% tag.name %]</a>
 		[% END %]
       [% END %]
 		&nbsp;&nbsp;<a href="[% url %]">[[% article.comments_rs.count %]] comments</a>

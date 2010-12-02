@@ -10,21 +10,19 @@ extends 'WebNano::Controller';
 use URI::Escape 'uri_unescape';
 use Nblog::Form::Comment;
 
-has article => ( is => 'ro' );
+has article => ( is => 'rw' );
 
-around handle => sub {
-    my ( $orig, $class, %args ) = @_;
-    my $path = delete $args{path};
-    my( $path_part, $new_path ) = ( $path =~ qr{^([^/]*)/?(.*)} );
-    my $app = $args{app};
-    my $title = uri_unescape( $path_part );
-    $args{article} = 
-          $app->schema->resultset('Article')
-                ->search( { 'subject' => { like => $app->ravlog_url_to_query($title) } } )->first;
-    $args{path} = $new_path;
-    $args{self_url} = $args{self_url} . $title;
-    $class->$orig( %args );
+around local_dispatch => sub {
+    my ( $orig, $self, $title, @args ) = @_;
+    my $title = uri_unescape( $title );
+    my $app = $self->app;
+    $self->article( 
+        $app->schema->resultset('Article')
+            ->search( { 'subject' => { like => $app->ravlog_url_to_query($title) } } )->first
+    );
+    $self->$orig( @args );
 };
+
 
 sub index_action {
     return shift->view_action( @_ );
