@@ -1,7 +1,7 @@
 [% PROCESS Admin/nav.tt %]
 <h3>Users</h3>
 <p>
-  <a href="/Admin/User/create') %]">Create User</a>
+  <a href="/Admin/User/create">Create User</a>
 </p>
 
 <table border="1" cellpadding="3" cellspacing="0"> 
