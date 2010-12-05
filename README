@@ -2,3 +2,5 @@ This is rewrite of RavLog by Gerda Shank replacing Catalyst with WebNano.
 
 The current revision requires latest WebNano from github.
 
+To create a CPAN-ready distribution file remove this README and run 'dzil build'.
+

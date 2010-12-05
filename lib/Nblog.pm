@@ -178,15 +178,24 @@ sub pages {
 }
 
 
-override psgi_callback => sub {
-    my $app = super;
-    $app = Plack::Middleware::Static->wrap( $app, path => qr{^/static/}, root => './templates/' );
-    $app = Plack::Middleware::Static->wrap( $app, path => qr{^/favicon.ico$}, root => './templates/static/images/' );
-    $app = Plack::Middleware::Session->wrap( $app, store => Plack::Session::Store::Cache->new(
-            cache => CHI->new(driver => 'FastMmap')
-        )
-    );
+around psgi_callback => sub {
+    my $orig = shift;
+    my $self = shift;
+    my $app = $self->$orig( @_ );
+    for my $root ( @{ $self->renderer->global_path } ){
+        $app = Plack::Middleware::Static->wrap( $app, path => qr{^/static/}, root => $root );
+        $app = Plack::Middleware::Static->wrap( $app, path => qr{^/favicon.ico$}, root => "$root/static/images/" );
+        $app = Plack::Middleware::Session->wrap( $app, store => Plack::Session::Store::Cache->new(
+                cache => CHI->new(driver => 'FastMmap')
+            )
+        );
+    }
     return $app;
 };
 
 1;
+
+__END__
+
+# ABSTRACT: A simple blog engine
+
