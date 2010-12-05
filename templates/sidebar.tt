@@ -10,6 +10,8 @@
 	</div>
 	<br class="clear"/>
 	<div style="padding-left: 20px">
+	<h3>Meta</h3>
+	[% PROCESS 'shared/login_list.tt' %]
 	<h2>Calendar</h2>
 			<div id="calendar">
 					[% c.app.calendar %]
@@ -22,7 +24,5 @@
 	[% PROCESS 'shared/links_list.tt' %]
 	<h3>Feeds</h3>
 	[% PROCESS 'shared/feed_list.tt' %]
-	<h3>Meta</h3>
-	[% PROCESS 'shared/login_list.tt' %]
 	</div>
 </div>
