@@ -2,7 +2,7 @@
 # for MySQL based one you need to adjust the commands slightly
 
 perl Makefile.PL
-(sudo) make installdeps
+(sudo) cpanm --installdeps .
 
 # create a local config file, suchs as nblog_local.pl with your database connect info
 cp nblog.pl nblog_local.pl
@@ -16,7 +16,7 @@ sqlite3 nblog.db < Nblog-Schema-1.x-SQLite.sql
 sqlite3 nblog.db < sql/nblog_initial_data.sql 
 
 script/create_login.pl
-script/nblog_server.pl
 
-# login into http://localhost:3000/
+plackup
+# login into http://localhost:5000/
 
