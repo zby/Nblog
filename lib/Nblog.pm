@@ -182,7 +182,7 @@ around psgi_callback => sub {
     my $orig = shift;
     my $self = shift;
     my $app = $self->$orig( @_ );
-    for my $root ( @{ $self->renderer->global_path } ){
+    for my $root ( @{ $self->renderer->_global_path } ){
         $app = Plack::Middleware::Static->wrap( $app, path => qr{^/static/}, root => $root );
         $app = Plack::Middleware::Static->wrap( $app, path => qr{^/favicon.ico$}, root => "$root/static/images/" );
         $app = Plack::Middleware::Session->wrap( $app, store => Plack::Session::Store::Cache->new(
