@@ -243,13 +243,26 @@ sub _parse {
             # one of these tags
             elsif (
                 $type eq any(
-                    qw(i strong b u pre samp code
+                    qw(i strong b u samp code
                         kbd p q ol ul li dt dl dd
                         tt big small sub sup)
                 )
                 )
             {
                 $result .= qq{<$type>};
+                $result .= $self->_parse(@kids);
+                $result .= qq{</$type>};
+            }
+
+            # pre
+            elsif ( $type eq 'pre' ) {
+                my $class = $element->attr('class');
+                if($class){
+                    $result .= qq{<$type class="$class">};
+                }
+                else{
+                    $result .= qq{<$type>};
+                }
                 $result .= $self->_parse(@kids);
                 $result .= qq{</$type>};
             }

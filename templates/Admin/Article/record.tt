@@ -4,3 +4,6 @@
 <h2>[% record.subject %]</h2>
 
 <p>[% record.formatted_body %]</p>
+<hr>
+<a href="edit">Edit</a>
+

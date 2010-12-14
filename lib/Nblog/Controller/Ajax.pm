@@ -36,7 +36,7 @@ sub check_articles_action {
    foreach my $article (@articles)
    {
       push @out,
-         '<a href="/view/'
+         '<a href="/Article/'
          . $self->app->ravlog_txt_to_url( $article->subject() ) . '">'
          . $article->subject()
          . '</a><br/>';
