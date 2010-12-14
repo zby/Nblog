@@ -46,14 +46,24 @@ around handle => sub {
     if( $env->{'psgix.session'}{user_id} ){
         $env->{user} = $self->schema->resultset( 'User' )->find( $env->{'psgix.session'}{user_id} );
     }
-    else{
+    elsif( $env->{REQUEST_METHOD} eq 'POST' ){
         my $req = Plack::Request->new( $env );
         if( $req->param( 'username' ) && $req->param( 'password' ) ){
             my $user = $self->schema->resultset( 'User' )->search( { username => $req->param( 'username' ) } )->first;
             if( $user && $user->check_password( $req->param( 'password' ) ) ){
                 $env->{user} = $user;
                 $env->{'psgix.session'}{user_id} = $user->id;
+                my $res = my $res = $req->new_response(302);
+                $res = Plack::Response->new;
+                $res->redirect( $req->uri );
+                return $res->finalize;
             }
+            else{
+                $env->{'Nblog.login_error'} = 1;
+            }
+        }
+        else{
+            $env->{'Nblog.login_error'} = 1;
         }
     }
     $self->$orig( $env, @_ );

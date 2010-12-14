@@ -1,7 +1,7 @@
 <br />
     [% article.subject %]
 	<div class="post">
-	[% url = '/' _ c.ravlog_txt_to_url(article.subject, article.id) _ '/view' %]
+	[% url = '/' _ c.ravlog_txt_to_url(article.subject, article.id) %]
 	<div class="post-info">
 		<h2 class="post-title">
 			<a title="[% c.uri_for(url) %]" href="[% url %]">[% article.subject %]</a>
