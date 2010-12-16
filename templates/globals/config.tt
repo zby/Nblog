@@ -10,61 +10,48 @@
      MACRO debug(message) CALL c.log.debug(message);
    END;
 
-   # set defaults for variables, etc.
-   DEFAULT 
-     site = { 
-             title     => c.config.site.name,
-                layout => '/layout.tt',
-                stylesheets => 'static/stylesheets',
-                javascripts => 'static/javascripts'
-                images => 'static/images'
-            };
-                        
-     MACRO ravlog_define_headers
-       BLOCK;
-       '<script src="/static/js/app.js" type="text/javascript"></script>';
-       '<script src="/static/javascripts/nicetitles.js" type="text/javascript"></script>';
-       '<script src="/static/javascripts/niftycube.js" type="text/javascript"></script>';
-       '<script src="/static/javascripts/ravlogdates.js" type="text/javascript"></script>';
-       '<link href="/static/stylesheets/nicetitles.css" media="screen" rel="stylesheet" type="text/css" />';
-       '<link href="/static/stylesheets/default.css" media="screen" rel="stylesheet" type="text/css" />';
-       '<link href="/static/stylesheets/tabnav.css" media="screen" rel="stylesheet" type="text/css" />';
-     END;
-            
-     MACRO stylesheet_link_tag ( stylesheet )
-       BLOCK;
-       '<link href="/' _ site.stylesheets _ '/' _ stylesheet _ '"' _ ' rel="stylesheet" type="text/css" media="all" />';
-     END;
-            
-     MACRO javascript_include_tag ( javascript )
-   BLOCK;
-   '<script src="/' _ site.javascripts _ '/' _ javascript _ '" type="text/javascript"></script>';
-     END;
-                        
-     MACRO javascript_include_tag ( javascript )
-       BLOCK;
-       '<script src="/' _ site.javascripts _ '/' _ javascript _ '" type="text/javascript"></script>';
-     END;
-            
-     MACRO load_file ( file )
-       BLOCK;
-       file;
-     END;
-            
-     MACRO sh_include
-       BLOCK;
-       '<link type="text/css" rel="stylesheet" href="/static/shstyles/shCore.css"></link>';
-       '<link type="text/css" rel="stylesheet" href="/static/shstyles/shThemeDefault.css"></link>';
-       '<script class="javascript" src="/static/shscripts/shCore.js"></script>';
-       '<script class="javascript" src="/static/shscripts/shBrushPerl.js"></script>';
-       '<script type="text/javascript">';
-       'SyntaxHighlighter.config.clipboardSwf = "/static/shscripts/clipboard.swf";';
-       'SyntaxHighlighter.all();';
-       '</script>';
-     END;
+
+   MACRO ravlog_define_headers
+     BLOCK;
+     '<script src="/static/js/app.js" type="text/javascript"></script>';
+     '<script src="/static/javascripts/nicetitles.js" type="text/javascript"></script>';
+     '<script src="/static/javascripts/niftycube.js" type="text/javascript"></script>';
+     '<script src="/static/javascripts/ravlogdates.js" type="text/javascript"></script>';
+     '<link href="/static/stylesheets/nicetitles.css" media="screen" rel="stylesheet" type="text/css" />';
+     '<link href="/static/stylesheets/default.css" media="screen" rel="stylesheet" type="text/css" />';
+     '<link href="/static/stylesheets/tabnav.css" media="screen" rel="stylesheet" type="text/css" />';
+   END;
+          
+   MACRO stylesheet_link_tag ( stylesheet )
+     BLOCK;
+     '<link href="/static/stylesheets/' _ stylesheet _ '"' _ ' rel="stylesheet" type="text/css" media="all" />';
+   END;
+          
+   MACRO javascript_include_tag ( javascript )
+     BLOCK;
+     '<script src="/static/javascripts/' _ javascript _ '" type="text/javascript"></script>';
+   END;
+                      
+   MACRO image_tag ( image )
+     BLOCK;
+     '<img src="/static/images/' _ image _ '" alt="" />'; 
+   END;
+
+   MACRO load_file ( file )
+     BLOCK;
+     file;
+   END;
+          
+   MACRO sh_include
+     BLOCK;
+     '<link type="text/css" rel="stylesheet" href="/static/shstyles/shCore.css"></link>';
+     '<link type="text/css" rel="stylesheet" href="/static/shstyles/shThemeDefault.css"></link>';
+     '<script class="javascript" src="/static/shscripts/shCore.js"></script>';
+     '<script class="javascript" src="/static/shscripts/shBrushPerl.js"></script>';
+     '<script type="text/javascript">';
+     'SyntaxHighlighter.config.clipboardSwf = "/static/shscripts/clipboard.swf";';
+     'SyntaxHighlighter.all();';
+     '</script>';
+   END;
            
-     MACRO image_tag ( image )
-       BLOCK;
-       '<img src="/' _ site.images _ '/' _ image _ '" alt="" />'; 
-     END;
 -%]
