@@ -1,4 +1,4 @@
-[% PROCESS Admin/nav.tt %]
+[% PROCESS nav.tt %]
 <h1>Edit User</h1>
 
 [% form %]

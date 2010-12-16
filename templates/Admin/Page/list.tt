@@ -1,4 +1,4 @@
-[% PROCESS Admin/nav.tt %]
+[% PROCESS nav.tt %]
 <h3>Page list</h3>
 
 <p>

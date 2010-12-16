@@ -187,19 +187,19 @@ sub pages {
    return shift->schema->resultset('Page')->search( display_in_drawer => 1 )->all();
 }
 
+has static_root => ( is => 'ro' );
 
 around psgi_callback => sub {
     my $orig = shift;
     my $self = shift;
     my $app = $self->$orig( @_ );
-    for my $root ( @{ $self->renderer->_global_path } ){
+    my $root = $self->static_root;
         $app = Plack::Middleware::Static->wrap( $app, path => qr{^/static/}, root => $root );
         $app = Plack::Middleware::Static->wrap( $app, path => qr{^/favicon.ico$}, root => "$root/static/images/" );
         $app = Plack::Middleware::Session->wrap( $app, store => Plack::Session::Store::Cache->new(
                 cache => CHI->new(driver => 'FastMmap')
             )
         );
-    }
     return $app;
 };
 

@@ -2,6 +2,7 @@ This is rewrite of RavLog by Gerda Shank replacing Catalyst with WebNano.
 
 The current revision requires latest WebNano from github.
 
-To create a CPAN-ready distribution remove this README and run 'dzil build'.
-Then go into the generated directory and follow the instructions in INSTALL.
+To install prerequisites use 'dzil listdeps | cpanm' or remove this README,
+run 'dzil build' and install the created CPAN-ready distribution the normal
+way.
 

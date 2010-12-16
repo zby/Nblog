@@ -1,4 +1,4 @@
-[% PROCESS Admin/nav.tt %]
+[% PROCESS nav.tt %]
 
 <h3>Recent Articles</h3>
 <table border="1" cellpadding="3" cellspacing="0"> 

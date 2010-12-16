@@ -62,7 +62,7 @@ sub page_action {
       ->search( { name => { like => $self->app->ravlog_url_to_query($what) } } )->first();
 
    my $name = $self->app->ravlog_txt_to_url( $page->name );
-   my $sidebar = undef unless $page->display_sidebar();
+   my $sidebar = $page->display_sidebar();
    return $self->render( 
        template => 'page.tt',
        page => $page,

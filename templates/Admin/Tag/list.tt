@@ -1,4 +1,4 @@
-[% PROCESS Admin/nav.tt %]
+[% PROCESS nav.tt %]
 
 <h3>Tags</h3>
 <p>
