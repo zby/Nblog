@@ -1,8 +1,8 @@
 <h2>Calendar</h2>
 <ul>
-	<li>
-		<div id="calendar">
-				[% calendar %]
-		</div>
-	</li>
+    <li>
+        <div id="calendar">
+                [% calendar %]
+        </div>
+    </li>
 </ul>

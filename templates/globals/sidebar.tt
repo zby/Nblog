@@ -1,28 +1,28 @@
 <div id="sidebar">
-	<div id="search_pane">
-	<form action="/search">
-	<p>
-		<span>Search:</span>
-		<input type="text" name="phrase" size="20" onkeyup="check_articles(this);"/>
-		<div style="display: none;" id="search_board"></div>
-	</p>
-	</form>
-	</div>
-	<br class="clear"/>
-	<div style="padding-left: 20px">
-	<h3>Meta</h3>
-	[% PROCESS 'elements/login_list.tt' %]
-	<h2>Calendar</h2>
-			<div id="calendar">
-					[% c.app.calendar %]
-			</div>
-	<h3>Tags</h3>
-	[% PROCESS 'elements/tags_list.tt' %]
-	<h3>Archives</h3>
-	[% PROCESS 'elements/archives_list.tt' %]
-	<h3>Links</h3>
-	[% PROCESS 'elements/links_list.tt' %]
-	<h3>Feeds</h3>
-	[% PROCESS 'elements/feed_list.tt' %]
-	</div>
+    <div id="search_pane">
+    <form action="/search">
+    <p>
+        <span>Search:</span>
+        <input type="text" name="phrase" size="20" onkeyup="check_articles(this);"/>
+        <div style="display: none;" id="search_board"></div>
+    </p>
+    </form>
+    </div>
+    <br class="clear"/>
+    <div style="padding-left: 20px">
+    <h3>Meta</h3>
+    [% PROCESS 'elements/login_list.tt' %]
+    <h2>Calendar</h2>
+            <div id="calendar">
+                    [% c.app.calendar %]
+            </div>
+    <h3>Tags</h3>
+    [% PROCESS 'elements/tags_list.tt' %]
+    <h3>Archives</h3>
+    [% PROCESS 'elements/archives_list.tt' %]
+    <h3>Links</h3>
+    [% PROCESS 'elements/links_list.tt' %]
+    <h3>Feeds</h3>
+    [% PROCESS 'elements/feed_list.tt' %]
+    </div>
 </div>

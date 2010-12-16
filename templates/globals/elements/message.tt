@@ -1,7 +1,7 @@
 [% IF c.flash.notice %]
         <br />
-				<br class="clear"/>
-				<br />
+                <br class="clear"/>
+                <br />
         <ul id="error_content">
                 <li id="one">
                         <h3>Notice</h3>

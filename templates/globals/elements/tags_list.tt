@@ -3,10 +3,10 @@
 <div id="tag_list">
 <ul>
 [% FOREACH tag = c.app.tags %]
-	<li><a title="[% tag.name %]" href="/tag/[% c.app.ravlog_txt_to_url(tag.name) %]">[% tag.name %]</a></li>
+    <li><a title="[% tag.name %]" href="/tag/[% c.app.ravlog_txt_to_url(tag.name) %]">[% tag.name %]</a></li>
 [% END %]
 <script type="text/javascript" charset="utf-8">
-	toggle_tag_list();
+    toggle_tag_list();
 </script>
 </ul>
 </div>
