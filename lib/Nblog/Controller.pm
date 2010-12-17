@@ -54,6 +54,20 @@ sub search_action {
    )
 }
 
+sub tag_action {
+   my ( $self, $tag ) = @_;
+
+   my $db_tag =
+      $self->app->schema->resultset('Tag')
+      ->search( { name => { like => $self->app->ravlog_url_to_query($tag) } } )->first();
+   warn $db_tag->id;
+   return $self->render(
+       template => 'blog_index.tt',
+       articles => scalar $db_tag->articles,
+       rss      => $db_tag->name,
+   );
+}
+
 sub page_action {  
    my ( $self, $what ) = @_;
 

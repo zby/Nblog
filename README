@@ -6,3 +6,5 @@ To install prerequisites use 'dzil listdeps | cpanm' or remove this README,
 run 'dzil build' and install the created CPAN-ready distribution the normal
 way.
 
+The proceed with the instructions in INSTALL.
+
