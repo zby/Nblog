@@ -45,6 +45,8 @@ around handle => sub {
     my $env  = shift;
     if( $env->{'psgix.session'}{user_id} ){
         $env->{user} = $self->schema->resultset( 'User' )->find( $env->{'psgix.session'}{user_id} );
+        $env->{'psgix.session.options'}{expires} = time + 60 * 60 * 24 * 30 if $env->{'psgix.session'}{remember};
+        delete $env->{'psgix.session'}{remember};
     }
     elsif( $env->{REQUEST_METHOD} eq 'POST' ){
         my $req = Plack::Request->new( $env );
@@ -53,8 +55,8 @@ around handle => sub {
             if( $user && $user->check_password( $req->param( 'password' ) ) ){
                 $env->{user} = $user;
                 $env->{'psgix.session'}{user_id} = $user->id;
-                my $res = my $res = $req->new_response(302);
-                $res = Plack::Response->new;
+                $env->{'psgix.session'}{remember} = 1 if $req->param( 'remember' );
+                my $res = Plack::Response->new;
                 $res->redirect( $req->uri );
                 return $res->finalize;
             }
