@@ -208,7 +208,7 @@ around psgi_callback => sub {
     my $favicon_c = Plack::App::Cascade->new;
     for my $root ( $self->static_roots ){
         $cascade->add( Plack::App::File->new(root => $root )->to_app );
-        $favicon_c->add( Plack::App::File->new( root => "$root/static/images/" )->to_app );
+        $favicon_c->add( Plack::App::File->new( file => "$root/images/favicon.ico" )->to_app );
     };
     my $app = Plack::App::URLMap->new;
     $app->map( '/static', $cascade );
