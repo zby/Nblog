@@ -1,6 +1,6 @@
 {
   name => 'Nblog',
-  static_root => '',
+  static_root => [ 'static' ],
   using_frontend_proxy => 0,
   'schema' => {
     connect_info => [

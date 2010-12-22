@@ -13,6 +13,10 @@ use DateTime;
 use Plack::Middleware::Static;
 use Plack::Middleware::Session;
 use Plack::Session::Store::Cache;
+use Plack::App::Cascade;
+use Plack::App::URLMap;
+use Plack::App::File;
+
 use CHI;
 
 extends 'WebNano';
@@ -189,20 +193,33 @@ sub pages {
    return shift->schema->resultset('Page')->search( display_in_drawer => 1 )->all();
 }
 
-has static_root => ( is => 'ro' );
+has static_root => (
+    traits     => ['Array'],
+    is         => 'ro',
+    isa        => 'ArrayRef[Str]',
+    handles    => { static_roots => 'elements' },
+);
+    
 
 around psgi_callback => sub {
     my $orig = shift;
     my $self = shift;
-    my $app = $self->$orig( @_ );
-    my $root = $self->static_root;
-        $app = Plack::Middleware::Static->wrap( $app, path => qr{^/static/}, root => $root );
-        $app = Plack::Middleware::Static->wrap( $app, path => qr{^/favicon.ico$}, root => "$root/static/images/" );
-        $app = Plack::Middleware::Session->wrap( $app, store => Plack::Session::Store::Cache->new(
-                cache => CHI->new(driver => 'FastMmap')
-            )
-        );
-    return $app;
+    my $cascade = Plack::App::Cascade->new;
+    my $favicon_c = Plack::App::Cascade->new;
+    for my $root ( $self->static_roots ){
+        $cascade->add( Plack::App::File->new(root => $root )->to_app );
+        $favicon_c->add( Plack::App::File->new( root => "$root/static/images/" )->to_app );
+    };
+    my $app = Plack::App::URLMap->new;
+    $app->map( '/static', $cascade );
+    $app->map( '/favicon.ico', $favicon_c );
+    $app->map( '/', $self->$orig( @_ ) );
+    return Plack::Middleware::Session->wrap( 
+        $app->to_app, 
+        store => Plack::Session::Store::Cache->new(
+            cache => CHI->new(driver => 'FastMmap')
+        )
+    );
 };
 
 1;
