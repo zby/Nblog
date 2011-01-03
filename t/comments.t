@@ -8,16 +8,16 @@ use Plack::Builder;
 
 my $app = Nblog->new_with_config();
 
-my $psgi_callback = builder {
+my $psgi_app = builder {
     enable "Plack::Middleware::Static",
         path => qr{^/static/}, root => './templates/globals/';
     enable "Plack::Middleware::Static",
         path => qr{^/favicon.ico$}, root => './templates/globals/static/images/';
     enable 'Session';
-    $app->psgi_callback;;
+    $app->psgi_app;;
 };
 
-my $mech = Test::WWW::Mechanize::PSGI->new( app => $psgi_callback );
+my $mech = Test::WWW::Mechanize::PSGI->new( app => $psgi_app );
 use String::Random qw(random_string random_regex);
 
 my $schema = $app->schema;

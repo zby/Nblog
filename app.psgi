@@ -3,5 +3,5 @@ use Nblog;
 
 my $app = Nblog->new_with_config();
 
-$app->psgi_callback;
+$app->psgi_app;
 

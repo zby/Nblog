@@ -201,7 +201,7 @@ has static_root => (
 );
     
 
-around psgi_callback => sub {
+around psgi_app => sub {
     my $orig = shift;
     my $self = shift;
     my $cascade = Plack::App::Cascade->new;
