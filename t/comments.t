@@ -36,6 +36,7 @@ $mech->submit_form_ok( {
     'Creating comment'
 );
 
+$mech->get_ok( '/login', 'Request should succeed' );
 $mech->submit_form_ok( {
         form_number => 1,
         fields => {

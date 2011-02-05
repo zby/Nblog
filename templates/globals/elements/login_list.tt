@@ -6,13 +6,7 @@
 <li><form id="logout_form" method="post" action="/logout"><input type="hidden" name="logout" value="1"><input type="submit" name="submit" id="submit" value="Logout" /></form>
 </ul>
 [% ELSE %]
-<form id="login_form" method="post" > 
-<fieldset class="main_fieldset"> 
- [% SET key = 'Nblog.login_error'; IF c.env.$key %]<div class="login_error">Wrong username or password</div>[% END %]
- <div><label class="label" for="username">Username: </label><input type="text" name="username" id="username" value="" /></div> 
- <div><label class="label" for="password">Password: </label><input type="password" name="password" id="password" value="" /></div> 
- <div><label class="label" for="remember">Remember: </label><input type="checkbox" name="remember" id="remember" value="1" /></div> 
- <div><input type="submit" name="submit" id="submit" value="Login" /></div> 
-</fieldset>
-</form> 
+<ul>
+<li><a href="/login">Login</a>
+</ul>
 [% END %]

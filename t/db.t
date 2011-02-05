@@ -19,14 +19,8 @@ unless( $user )
 }
 ok( $user,  'get user' );
 
-my @articles = $schema->resultset('Article')->get_latest_articles;
-
-foreach my $article (@articles)
-{
-   print $article->subject, "\n";
-   print $article->user->username, "\n" if $article->user;
-   print $article->formatted_body, "\n";
-}
+my ( $article1 ) = $schema->resultset('Article')->get_latest_articles;
+is( ref $article1, 'Nblog::Schema::Result::Article', 'get_latest_articles' );
 
 my $time = DateTime->now;
 my $article = $schema->resultset('Article')->new_result({});

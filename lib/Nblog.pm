@@ -49,27 +49,9 @@ around handle => sub {
     my $env  = shift;
     if( $env->{'psgix.session'}{user_id} ){
         $env->{user} = $self->schema->resultset( 'User' )->find( $env->{'psgix.session'}{user_id} );
-        $env->{'psgix.session.options'}{expires} = time + 60 * 60 * 24 * 30 if $env->{'psgix.session'}{remember};
-        delete $env->{'psgix.session'}{remember};
-    }
-    elsif( $env->{REQUEST_METHOD} eq 'POST' ){
-        my $req = Plack::Request->new( $env );
-        if( $req->param( 'username' ) && $req->param( 'password' ) ){
-            my $user = $self->schema->resultset( 'User' )->search( { username => $req->param( 'username' ) } )->first;
-            if( $user && $user->check_password( $req->param( 'password' ) ) ){
-                $env->{user} = $user;
-                $env->{'psgix.session'}{user_id} = $user->id;
-                $env->{'psgix.session'}{remember} = 1 if $req->param( 'remember' );
-                my $res = Plack::Response->new;
-                $res->redirect( $req->uri );
-                return $res->finalize;
-            }
-            else{
-                $env->{'Nblog.login_error'} = 1;
-            }
-        }
-        else{
-            $env->{'Nblog.login_error'} = 1;
+        if( $env->{'psgix.session'}{remember} ){
+            $env->{'psgix.session.options'}{expires} = time + 60 * 60 * 24 * 30;
+            delete $env->{'psgix.session'}{remember};
         }
     }
     $self->$orig( $env, @_ );
@@ -190,7 +172,7 @@ sub ravlog_url_to_query {
 }
 
 sub pages {
-   return shift->schema->resultset('Page')->search( display_in_drawer => 1 )->all();
+   return shift->schema->resultset('Page')->search( { display_in_drawer => 1 } )->all();
 }
 
 has static_root => (

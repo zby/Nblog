@@ -11,8 +11,12 @@ extends 'WebNano::DirController';
 around 'local_dispatch' => sub {
     my $orig = shift;
     my $self = shift;
-    if( !$self->env->{user} ){
-        return $self->render( template => 'login_required.tt' );
+    my $env = $self->env;
+    if( !$env->{user} ){
+        my $res = Plack::Response->new;
+        $res->redirect( '/login' );
+        $env->{'psgix.session'}{redir_to} = $env->{PATH_INFO};
+        return $res;
     }
     $self->$orig( @_ );
 };

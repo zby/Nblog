@@ -9,6 +9,6 @@ my $articles = $app->schema->resultset('Nblog::Schema::Result::Article')->get_la
 ok( $articles->count, 'Articles found' );
 
 my $out = $app->renderer->render( template => 'blog_index.tt', articles => $articles );
-warn $out;
+#warn $out;
 
 done_testing;

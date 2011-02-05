@@ -14,13 +14,20 @@ has article => ( is => 'rw' );
 
 around local_dispatch => sub {
     my ( $orig, $self, $title, @args ) = @_;
-    my $title = uri_unescape( $title );
+    $title = uri_unescape( $title );
     my $app = $self->app;
-    $self->article( 
-        $app->schema->resultset('Article')
-            ->search( { 'subject' => { like => $app->ravlog_url_to_query($title) } } )->first
-    );
-    $self->$orig( @args );
+    my $article = $app->schema->resultset('Article')
+        ->search( { 'subject' => { like => $app->ravlog_url_to_query($title) } } )->first;
+    if( $article ){
+        $self->article( $article );
+        $self->$orig( @args );
+    }
+    else{
+        my $res = Plack::Response->new(404);
+        $res->content_type('text/plain');
+        $res->body( 'No such page' );
+        return $res;
+    }
 };
 
 
