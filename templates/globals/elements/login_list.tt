@@ -7,6 +7,6 @@
 </ul>
 [% ELSE %]
 <ul>
-<li><a href="/login">Login</a>
+<li><a href="[% IF c.app.secure; 'https://' _ c.env.SERVER_NAME; END; %]/login">Login</a>
 </ul>
 [% END %]

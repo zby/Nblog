@@ -29,6 +29,8 @@ has '+configfile' => ( default => 'nblog_local.pl' );
 
 has 'name' => ( is => 'ro', isa => 'Str' );
 
+has 'secure' => ( is => 'ro', isa => 'Num' );
+
 subtype 'Nblog::Schema::Connected' => as class_type( 'Nblog::Schema' );
 coerce 'Nblog::Schema::Connected'
     => from 'HashRef' 

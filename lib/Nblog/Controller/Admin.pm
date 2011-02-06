@@ -12,6 +12,12 @@ around 'local_dispatch' => sub {
     my $orig = shift;
     my $self = shift;
     my $env = $self->env;
+    if( $self->app->secure && $env->{'psgi.url_scheme'} ne 'https' ){
+        my $res = Plack::Response->new;
+        my $secure_url = 'https://' . $env->{SERVER_NAME} . $env->{PATH_INFO};
+        $res->redirect( $secure_url );
+        return $res;
+    }
     if( !$env->{user} ){
         my $res = Plack::Response->new;
         $res->redirect( '/login' );
