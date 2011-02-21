@@ -30,7 +30,7 @@ $mech->submit_form_ok( {
     },
     'Logging in'
 );
-$mech->content_contains( 'div class="login_error"' );
+$mech->content_contains( 'div class="error"' );
 $mech->submit_form_ok( {
         form_number => 1,
         fields => {

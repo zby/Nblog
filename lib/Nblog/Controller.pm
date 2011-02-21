@@ -11,49 +11,11 @@ sub index_action {
     return $self->render( template => 'blog_index.tt', articles => $articles );
 }
 
-sub logout_action {
-    my $self = shift;
-    my $req = $self->req;
-    if( $req->param( 'logout' ) ){
-        delete $self->env->{'psgix.session'}{user_id};
-    }
-    my $res = $req->new_response();
-    $res->redirect( '/' );
-    return $res;
-}
-
 sub login_action {
     my $self = shift;
-    my $login_error;
     my $env = $self->env;
-    if( $self->app->secure && $env->{'psgi.url_scheme'} ne 'https' ){
-        my $res = Plack::Response->new;
-        my $secure_url = 'https://' . $env->{SERVER_NAME} . $env->{PATH_INFO};
-        $res->redirect( $secure_url );
-        return $res;
-    }
-    if( defined $env->{user} ){
-        return 'Already logged in';
-    }
-    elsif( $env->{REQUEST_METHOD} eq 'POST' ){
-        my $req = Plack::Request->new( $env );
-        if( $req->param( 'username' ) && $req->param( 'password' ) ){
-            my $user = $self->app->schema->resultset( 'User' )->search( { username => $req->param( 'username' ) } )->first;
-            if( $user && $user->check_password( $req->param( 'password' ) ) ){
-                $env->{user} = $user;
-                $env->{'psgix.session'}{user_id} = $user->id;
-                $env->{'psgix.session'}{remember} = 1 if $req->param( 'remember' );
-                my $res = Plack::Response->new;
-                $res->redirect( delete $env->{'psgix.session'}{redir_to} );
-                return $res;
-            }
-        }
-        $login_error = 1;
-    }
-    $env->{'psgix.session'}{redir_to} ||= $env->{HTTP_REFERER};
     return $self->render( 
         template => 'login.tt',
-        login_error => $login_error,
         redir_to => $env->{'psgix.session'}{redir_to},
     );
 }

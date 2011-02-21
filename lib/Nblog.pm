@@ -16,6 +16,7 @@ use Plack::Session::Store::Cache;
 use Plack::App::Cascade;
 use Plack::App::URLMap;
 use Plack::App::File;
+use Plack::Middleware::Auth::Form;
 
 use CHI;
 
@@ -51,10 +52,6 @@ around handle => sub {
     my $env  = shift;
     if( $env->{'psgix.session'}{user_id} ){
         $env->{user} = $self->schema->resultset( 'User' )->find( $env->{'psgix.session'}{user_id} );
-        if( $env->{'psgix.session'}{remember} ){
-            $env->{'psgix.session.options'}{expires} = time + 60 * 60 * 24 * 30;
-            delete $env->{'psgix.session'}{remember};
-        }
     }
     $self->$orig( $env, @_ );
 };
@@ -198,8 +195,20 @@ around psgi_app => sub {
     $app->map( '/static', $cascade );
     $app->map( '/favicon.ico', $favicon_c );
     $app->map( '/', $self->$orig( @_ ) );
+    $app = Plack::Middleware::Auth::Form->wrap( 
+        $app->to_app,
+        authenticator => sub {
+            my( $username, $password ) = @_;
+            my $user = $self->schema->resultset( 'User' )->search( { username => $username } )->first;
+            if( $user && $user->check_password( $password ) ){
+                return { user_id => $user->id };
+            }
+            return 0;
+        },
+        no_login_page => 1,
+    );
     return Plack::Middleware::Session->wrap( 
-        $app->to_app, 
+        $app, 
         store => Plack::Session::Store::Cache->new(
             cache => CHI->new(driver => 'FastMmap')
         )
