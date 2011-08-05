@@ -206,6 +206,7 @@ around psgi_app => sub {
             return 0;
         },
         no_login_page => 1,
+        secure => $self->secure,
     );
     return Plack::Middleware::Session->wrap( 
         $app, 
