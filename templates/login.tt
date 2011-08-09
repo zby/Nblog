@@ -1,0 +1,2 @@
+[% c.env.item( 'Plack::Middleware::Auth::Form.LoginForm' ) %]
+After login: [% redir_to %].

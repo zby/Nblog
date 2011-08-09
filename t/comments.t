@@ -6,7 +6,11 @@ use Nblog;
 use Test::WWW::Mechanize::PSGI;
 use Plack::Builder;
 
-my $app = Nblog->new_with_config();
+my $app = Nblog->new_with_config( configfile => 't/data/nblog_local.pl' );
+$app->schema->deploy();
+$app->schema->resultset( 'User' )->create( { username => 'test', password => 'pass_for_test' } );
+$app->schema->resultset( 'Article' )->create( { subject => 'test test', body => 'test', } );
+
 
 my $psgi_app = builder {
     enable "Plack::Middleware::Static",
