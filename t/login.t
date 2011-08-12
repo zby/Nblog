@@ -6,18 +6,12 @@ use Nblog;
 use Test::WWW::Mechanize::PSGI;
 use Plack::Builder;
 
-my $app = Nblog->new_with_config();
+my $app = Nblog->new_with_config( configfile => 't/data/nblog_local.pl' );
+$app->schema->deploy( { add_drop_table => 0 } );
+$app->schema->resultset( 'User' )->create( { username => 'test', password => 'pass_for_test' } );
+$app->schema->resultset( 'Article' )->create( { subject => 'test test', body => 'test', } );
 
-my $psgi_app = builder {
-    enable "Plack::Middleware::Static",
-        path => qr{^/static/}, root => './templates/globals/';
-    enable "Plack::Middleware::Static",
-        path => qr{^/favicon.ico$}, root => './templates/globals/static/images/';
-    enable 'Session';
-    $app->psgi_app;;
-};
-
-my $mech = Test::WWW::Mechanize::PSGI->new( app => $psgi_app );
+my $mech = Test::WWW::Mechanize::PSGI->new( app => $app->psgi_app );
 
 $mech->get_ok( '/Admin/Article/', 'Request should succeed' );
 is( $mech->uri(), 'http://localhost/login', 'Redirected to login' );
