@@ -1,7 +1,7 @@
 use Test::More;
 use Nblog;
 
-my $app = Nblog->new_with_config( configfile => 't/data/nblog_local.pl' );
+my $app = Nblog->new_with_config();
 $app->schema->deploy();
 
 ok( $app, 'App created' );

@@ -19,6 +19,8 @@ use Plack::App::File;
 use Plack::Middleware::Auth::Form;
 
 use CHI;
+use Path::Class;
+
 
 extends 'WebNano';
 use Nblog::Schema;
@@ -26,7 +28,9 @@ use WebNano::Renderer::TT;
 
 with 'MooseX::SimpleConfig';
 
-has '+configfile' => ( default => 'nblog_local.pl' );
+my $root = file(__FILE__)->dir->parent;
+my $configfile = $root->subdir( 'data' )->file( 'nblog_config.pl' )->stringify;
+has '+configfile' => ( default => $configfile );
 
 has 'name' => ( is => 'ro', isa => 'Str' );
 

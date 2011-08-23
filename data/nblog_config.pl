@@ -1,6 +1,10 @@
+use Path::Class;
+my $root = file(__FILE__)->dir->parent;
+
+
 {
   name => 'Nblog',
-  static_root => [ 'static' ],
+  static_root => [ $root->subdir( 'static')->stringify ],
   using_frontend_proxy => 0,
   'schema' => {
     connect_info => [
@@ -8,9 +12,9 @@
     ],
   },
   'renderer' => {
-    root         => 'templates',
+    root         => $root->subdir( 'templates' )->stringify,
     TEMPLATE_EXTENSION => 'tt',
-    INCLUDE_PATH => 'templates/globals',
+    INCLUDE_PATH => $root->subdir( 'templates/globals' )->stringify,
     PRE_PROCESS  => 'config.tt',
     WRAPPER      => 'wrapper.tt',
     VARIABLES    => { 
