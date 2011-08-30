@@ -39,7 +39,6 @@ sub archived
 sub from_month
 {
    my ( $self, $month, $year ) = @_;
-   $day   = sprintf '%02d', $day;
    $month = sprintf '%02d', $month;
 
    $year = DateTime->now()->year() unless defined $year;

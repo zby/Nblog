@@ -1,5 +1,5 @@
 use Path::Class;
-my $root = file(__FILE__)->dir->parent;
+my $root = file(__FILE__)->dir;
 
 
 {

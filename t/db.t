@@ -9,7 +9,7 @@ use Config::Any::Perl;
 use Test::More;
 use DateTime;
 
-my $cfg = Config::Any::Perl->load( 'data/nblog_config.pl' );
+my $cfg = Config::Any::Perl->load( 'share/nblog_config.pl' );
 my $schema = Nblog::Schema->connect( @{ $cfg->{schema}->{connect_info} } );
 $schema->deploy();
 $schema->resultset( 'User' )->create( { username => 'test', password => 'pass_for_test' } );

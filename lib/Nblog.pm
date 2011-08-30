@@ -19,17 +19,35 @@ use Plack::App::File;
 use Plack::Middleware::Auth::Form;
 
 use CHI;
-use Path::Class;
-
 
 extends 'WebNano';
 use Nblog::Schema;
 use WebNano::Renderer::TT;
+use File::ShareDir ();
+
+use Cwd qw[abs_path];
+use File::Spec ();
+
 
 with 'MooseX::SimpleConfig';
 
-my $root = file(__FILE__)->dir->parent;
-my $configfile = $root->subdir( 'data' )->file( 'nblog_config.pl' )->stringify;
+my $configfile = File::Spec->catfile( dist_dir(), 'nblog_config.pl' );
+
+sub dist_dir {
+    my $inc = 'Nblog.pm';
+    my $path = $INC{$inc} || '';
+    if ($path
+            and ( $path =~ s!(\S.*?)[\\/]?\bb?lib\b.*!$1!  || $path =~ s!(\.[\\/])?\bb?lib\b.*!.! )
+            and ( -e "$path/Makefile.PL" || -e "$path/dist.ini" )
+            and -e "$path/share"
+    ) {
+        return abs_path "$path/share";
+    }
+    else {
+        return File::ShareDir::dist_dir( 'Nblog' );
+    }
+}
+
 has '+configfile' => ( default => $configfile );
 
 has 'name' => ( is => 'ro', isa => 'Str' );
