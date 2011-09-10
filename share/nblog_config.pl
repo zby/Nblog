@@ -10,6 +10,7 @@ my $root = file(__FILE__)->dir;
     connect_info => [
         'dbi:SQLite:dbname=:memory:',
     ],
+    deploy_on_start => 1,
   },
   'renderer' => {
     root         => $root->subdir( 'templates' )->stringify,

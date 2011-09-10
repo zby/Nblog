@@ -57,7 +57,15 @@ has 'secure' => ( is => 'ro', isa => 'Num' );
 subtype 'Nblog::Schema::Connected' => as class_type( 'Nblog::Schema' );
 coerce 'Nblog::Schema::Connected'
     => from 'HashRef' 
-        => via { Nblog::Schema->connect( @{ $_->{connect_info} } ) };
+        => via { 
+            my $schema = Nblog::Schema->connect( @{ $_->{connect_info} } );
+            if( $_->{deploy_on_start} ){
+                $schema->deploy();
+                $schema->resultset( 'User' )->create( { username => 'test', password => 'pass_for_test' } );
+                $schema->resultset( 'Article' )->create( { subject => 'test test', body => 'test', } );
+            }
+            $schema;
+        };
 
 has schema => ( is => 'ro', isa => 'Nblog::Schema::Connected', coerce => 1 );
 

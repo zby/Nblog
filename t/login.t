@@ -7,9 +7,6 @@ use Test::WWW::Mechanize::PSGI;
 use Plack::Builder;
 
 my $app = Nblog->new_with_config();
-$app->schema->deploy( { add_drop_table => 0 } );
-$app->schema->resultset( 'User' )->create( { username => 'test', password => 'pass_for_test' } );
-$app->schema->resultset( 'Article' )->create( { subject => 'test test', body => 'test', } );
 
 my $mech = Test::WWW::Mechanize::PSGI->new( app => $app->psgi_app );
 
