@@ -252,3 +252,40 @@ __END__
 
 # ABSTRACT: A simple blog engine
 
+=head1 SYNOPSIS
+
+You can run Nblog with L<plackup> from a following simple app.psgi file,
+it will use the default config with a in-memory database:
+
+    use Nblog;
+
+    my $app = Nblog->new_with_config();
+
+    $app->psgi_app;
+
+
+Here is another .psgi file:
+
+    use Nblog;
+
+    my $app = Nblog->new_with_config(
+        schema => {
+            connect_info => [
+                'dbi:SQLite:dbname=blog.db',
+            ],
+            deploy_on_start => 1,
+        },
+
+    );
+
+    $app->psgi_app;
+
+This one will use reate a 'blog.db' file in the current directory
+as the blog database, the 'deploy_on_start' - parameter requests
+that the database will be (re)created anew.
+
+To customize Nblog you can provide values directly at the C<new_with_config> call
+or provide a different configuration file(s) (see L<MooseX::SimpleConfig>).
+
+Furhter customisation: ...
+
