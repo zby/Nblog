@@ -263,6 +263,7 @@ it will use the default config with a in-memory database:
 
     $app->psgi_app;
 
+You can login with username 'test' and password: 'pass_for_test'.
 
 Here is another .psgi file:
 
