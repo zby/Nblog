@@ -254,7 +254,7 @@ __END__
 
 =head1 SYNOPSIS
 
-You can run Nblog with L<plackup> from a following simple app.psgi file,
+You can run Nblog with L<plackup> from a following simple C<app.psgi> file,
 it will use the default config with a in-memory database:
 
     use Nblog;
@@ -265,7 +265,41 @@ it will use the default config with a in-memory database:
 
 You can login with username 'test' and password: 'pass_for_test'.
 
-Here is another .psgi file:
+=head1 DESCRIPTION
+
+Warning: still experimental.
+
+This is a simple, L<WebNano> based blog engine.
+The main idea is that it is easy to start and yet it is very configurable
+with everything overridable.
+
+=head2 Features
+
+=over
+
+=item nice urls
+
+=item multiple typesetting languages
+
+From Text::WikiFormat, through Textile to POD in HTML
+
+=item code formatting
+
+Perl only for now - based on http://alexgorbatchev.com/SyntaxHighlighter/
+
+=item search
+
+=item tags
+
+=item calendar
+
+=item RSS
+
+=back
+
+=head2 Step by step customisation 
+
+Here is another C<.psgi> file:
 
     use Nblog;
 
@@ -281,12 +315,69 @@ Here is another .psgi file:
 
     $app->psgi_app;
 
-This one will use reate a 'blog.db' file in the current directory
-as the blog database, the 'deploy_on_start' - parameter requests
-that the database will be (re)created anew.
+This one will use a 'blog.db' file in the current directory
+as the blog database.  The 'deploy_on_start' parameter requests
+that the database will be (re)created anew - you should remove it on the subsequent
+runs.
 
 To customize Nblog you can provide values directly at the C<new_with_config> call
 or provide a different configuration file(s) (see L<MooseX::SimpleConfig>).
 
-Furhter customisation: ...
+Customizing by overriding some of the static files and templates can be done
+with following C<.psgi> files:
+
+    use Nblog;
+
+    my $app = Nblog->new_with_config( static_root => [ 'static', Nblog::dist_dir() . '/static', ] );
+
+    $app->psgi_app;
+
+and
+
+    use Nblog;
+
+    my $app = Nblog->new_with_config( renderer => {
+            root  => [ 'templates', Nblog::dist_dir() . '/templates' ],
+            TEMPLATE_EXTENSION => 'tt',
+            INCLUDE_PATH => [ 'templates/globals', Nblog::dist_dir() . '/templates/globals' ],
+            PRE_PROCESS  => 'config.tt',
+            WRAPPER      => 'wrapper.tt',
+            VARIABLES    => { 
+                site_name => 'Writers Unite!',
+                sidebar   => 1,
+            }
+        }
+    );
+
+    $app->psgi_app;
+
+Finally you can also subclass Nblog:
+
+    {
+        package MyBlog;
+        use Moose;
+        extends 'Nblog';
+
+        sub controller_search_path { [ ref(shift), 'Nblog' ] };
+    }
+
+    {
+        package MyBlog::Controller::SomeNewPage;
+        use Moose;
+
+        extends 'WebNano::Controller';
+
+        sub index_action { return __PACKAGE__ };
+    }
+
+    my $app = MyBlog->new_with_config();
+
+    $app->psgi_app;
+
+
+Now going to C<http://0.0.0.0:5000/SomeNewPage/> should result in page with C<MyBlog::Controller::SomeNewPage>.
+
+=head1 SEE ALSO
+
+L<WebNano>
 
