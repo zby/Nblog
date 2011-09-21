@@ -269,8 +269,8 @@ You can login with username 'test' and password: 'pass_for_test'.
 
 Warning: still experimental.
 
-This is a simple, L<WebNano> based blog engine.
-The main idea is that it is easy to start and yet it is very configurable
+This is a simple blog engine, rewrite of Ravlog (https://github.com/gshank/ravlog) in L<WebNano> .
+The main idea is that it is easy to start and yet very configurable,
 with everything overridable.
 
 =head2 Features
