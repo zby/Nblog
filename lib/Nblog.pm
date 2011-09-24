@@ -63,6 +63,7 @@ coerce 'Nblog::Schema::Connected'
                 $schema->deploy();
                 $schema->resultset( 'User' )->create( { username => 'test', password => 'pass_for_test' } );
                 $schema->resultset( 'Article' )->create( { subject => 'test test', body => 'test', } );
+                $schema->resultset( 'Tag' )->create( { name => 'test' } );
             }
             $schema;
         };
