@@ -7,7 +7,7 @@ use MooseX::NonMoose;
 use Moose::Util::TypeConstraints;
 
 use Plack::Request;
-use HTML::CalendarMonthSimple;
+use Nblog::Calendar;
 use DateTime;
 
 use Plack::Middleware::Static;
@@ -93,7 +93,7 @@ sub calendar {
    my ( $self ) = @_;
 
    my $dt  = DateTime->now();
-   my $cal = new HTML::CalendarMonthSimple(
+   my $cal = new Nblog::Calendar(
       'year'  => $dt->year,
       'month' => $dt->month
    );
