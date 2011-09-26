@@ -2,7 +2,6 @@
 [% IF articles.count == 0 %]
 <p>No matching articles found</p>
 [% END %]
-<p>articles count = [% articles.count %]</p>
 [% WHILE ( article = articles.next ) %]
     <div class="post">
     [% url = '/Article/' _ c.app.ravlog_txt_to_url(article.subject, article.id) %]
