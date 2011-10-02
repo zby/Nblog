@@ -5,5 +5,12 @@
 
 <p>[% record.formatted_body %]</p>
 <hr>
+[% IF record.tags %]
+Tags: 
+[% FOR tag = record.tags %]
+[% tag.name %]
+[% END %]
+<br />
+[% END %]
 <a href="edit">Edit</a>
 
