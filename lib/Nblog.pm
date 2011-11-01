@@ -16,7 +16,6 @@ use Plack::Session::Store::Cache;
 use Plack::App::Cascade;
 use Plack::App::URLMap;
 use Plack::App::File;
-use Plack::Middleware::Auth::Form;
 
 use CHI;
 
@@ -28,6 +27,7 @@ use File::ShareDir ();
 use Cwd qw[abs_path];
 use File::Spec ();
 
+use Nblog::LoginPage;
 
 with 'MooseX::SimpleConfig';
 
@@ -226,7 +226,7 @@ around psgi_app => sub {
     $app->map( '/static', $cascade );
     $app->map( '/favicon.ico', $favicon_c );
     $app->map( '/', $self->$orig( @_ ) );
-    $app = Plack::Middleware::Auth::Form->wrap( 
+    $app = Nblog::LoginPage->wrap( 
         $app->to_app,
         authenticator => sub {
             my( $username, $password ) = @_;
@@ -236,8 +236,8 @@ around psgi_app => sub {
             }
             return 0;
         },
-        no_login_page => 1,
         secure => $self->secure,
+        renderer => $self->renderer,
     );
     return Plack::Middleware::Session->wrap( 
         $app, 
