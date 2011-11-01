@@ -55,9 +55,9 @@ $mech->content_contains( 'Email sent', 'ResetPass for test' );
 
 my $user = $app->schema->resultset( 'User' )->search({ username =>  'test' })->first;
 ok( $user->pass_token, 'pass_token set' );
-$mech->get_ok( '/ResetPass/reset/1/aaaa', 'reset token' );
+$mech->get_ok( '/ResetPass/reset/test/aaaa', 'reset token' );
 $mech->content_contains( 'Token invalid', 'invalid reset token' );
-$mech->get_ok( '/ResetPass/reset/1/' . $user->pass_token, 'reset token' );
+$mech->get_ok( '/ResetPass/reset/test/' . $user->pass_token, 'reset token' );
 $mech->content_contains( 'New password:<input', 'reset token verified' );
 $mech->submit_form_ok( {
         with_fields => {
