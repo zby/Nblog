@@ -17,9 +17,11 @@ extends 'WebNano::Controller';
 
 sub find_user {
     my( $self, $name ) = @_;
-    return $self->app->schema->resultset( 'User' )->search({ username =>  $name })->next
+    my $user = $self->app->schema->resultset( 'User' )->search({ username =>  $name })->next
        //
-       $self->app->schema->resultset( 'User' )->search({ email => $name })->next;
+      $self->app->schema->resultset( 'User' )->search({ email => $name })->next;
+    return $user, $user->email, $user->pass_token if $user;
+    return;
 }
 
 sub wrap_text{
@@ -27,17 +29,23 @@ sub wrap_text{
     return $self->render( template => \$text );
 }
 
+sub update_user{
+    my( $self, $user, $fields ) = @_;
+    $user->update( $fields );
+}
+
 sub index_action {
    my ( $self ) = @_;
    my $req = $self->req;
    if( $req->method eq 'POST' ){
-       my $user = $self->find_user( $req->param( 'username' ) );
+       my $username = $req->param( 'username' );
+       my( $user, $email ) = $self->find_user( $username );
        if( !$user ){
            return $self->wrap_text( "User not found" );
        }
        else{
-           $user->update({ pass_token => random_regex( '\w{40}' ) });
-           $self->send_pass_token( $user );
+           $self->update_user( $user, { pass_token => random_regex( '\w{40}' ) });
+           $self->send_pass_token( $user, $username, $email );
            return $self->wrap_text( "Email sent" );
        }
    }
@@ -64,7 +72,7 @@ sub build_email {
 
 
 sub send_pass_token {
-    my( $self, $user ) = @_;
+    my( $self, $user, $username, $email, $pass_token ) = @_;
     my $env = $self->env;
     my $my_server = $env->{HTTP_ORIGIN} //
     ( $env->{'psgi.url_scheme'} // 'http' ) . '://' . 
@@ -72,22 +80,20 @@ sub send_pass_token {
         $env->{SERVER_NAME} . 
         ( $env->{SERVER_PORT} && $env->{SERVER_PORT} != 80 ? ':' . $env->{SERVER_PORT} : '' )
     );
-    my $reset_url = $my_server . $self->self_url . 'reset/' . $user->username . '/' . $user->pass_token;
-    sendmail( $self->build_email( $user->email, $reset_url ) );
+    my $reset_url = $my_server . $self->self_url . 'reset/' . $username . '/' . $pass_token;
+    sendmail( $self->build_email( $email, $reset_url ) );
 }
 
 sub reset_action {
     my ( $self, $name, $token ) = @_;
     my $req = $self->req;
-    my $user = $self->find_user( $name );
-    if( !( $user && $user->pass_token eq $token ) ){
+    my( $user, $email, $pass_token ) = $self->find_user( $name );
+    if( !( $user && $pass_token eq $token ) ){
         return 'Token invalid';
     }
     else{
         if( $req->method eq 'POST' ){
-            $user->pass_token( undef );
-            $user->password( $req->param( 'password' ) );
-            $user->update();
+            $self->update_user( $user, { pass_token => undef, password => $req->param( 'password' ) } );
             return $self->wrap_text( 'Password reset' );
         }
         else{
