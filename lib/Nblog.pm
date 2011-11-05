@@ -8,6 +8,7 @@ use Moose::Util::TypeConstraints;
 
 use Plack::Request;
 use Nblog::Calendar;
+use Nblog::ResetPassApp;
 use DateTime;
 
 use Plack::Middleware::Static;
@@ -216,13 +217,15 @@ has static_root => (
 around psgi_app => sub {
     my $orig = shift;
     my $self = shift;
+    my $app = Plack::App::URLMap->new;
+    my $reset_pass = Nblog::ResetPassApp->new( schema => $self->schema, renderer => $self->renderer );
+    $app->map( '/ResetPass', $reset_pass );
     my $cascade = Plack::App::Cascade->new;
     my $favicon_c = Plack::App::Cascade->new;
     for my $root ( $self->static_roots ){
         $cascade->add( Plack::App::File->new(root => $root )->to_app );
         $favicon_c->add( Plack::App::File->new( file => "$root/images/favicon.ico" )->to_app );
     };
-    my $app = Plack::App::URLMap->new;
     $app->map( '/static', $cascade );
     $app->map( '/favicon.ico', $favicon_c );
     $app->map( '/', $self->$orig( @_ ) );
