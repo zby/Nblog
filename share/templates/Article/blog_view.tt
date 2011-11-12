@@ -1,12 +1,12 @@
 <br />
     [% article.subject %]
     <div class="post">
-    [% url = '/' _ c.ravlog_txt_to_url(article.subject, article.id) %]
+    [% url = '/' _ c.app.ravlog_txt_to_url(article.subject, article.id) %]
     <div class="post-info">
         <h2 class="post-title">
             <a title="[% c.uri_for(url) %]" href="[% url %]">[% article.subject %]</a>
         </h2>
-        <a href="[% c.base_uri %]/feed/comments/[% c.ravlog_txt_to_url(article.subject) %]"><img src="/static/images/rss.png" alt="RSS" /></a> &nbsp;
+        <a href="[% c.base_uri %]/Feed/comments/[% c.app.ravlog_txt_to_url(article.subject) %]"><img src="/static/images/rss.png" alt="RSS" /></a> &nbsp;
       <br/>
         <span>Posted by [% article.user.username %]&nbsp;&nbsp;&nbsp;</span>
       <p class="post-date"> 
@@ -21,7 +21,7 @@
       [% IF article.tags %]
         <span>Tags:</span>
         [% FOREACH tag = article.tags %] 
-            <a href="/tag/[% c.ravlog_txt_to_url(tag.name) %]">[% tag.name %]</a>
+            <a href="/tag/[% c.app.ravlog_txt_to_url(tag.name) %]">[% tag.name %]</a>
         [% END %]
       [% END %]
         &nbsp;&nbsp;<a href="[% url %]">[[% article.comments_rs.count %]] comments</a>

@@ -27,7 +27,7 @@ sub comments_action {
    else
    {
       @comments =
-         $self->app->resultset( 'Article' )
+         $self->app->schema->resultset( 'Article' )
          ->search( { subject => { like => $self->app->ravlog_url_to_query($subject) } } )->first()
          ->comments();
    }

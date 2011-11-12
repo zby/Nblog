@@ -9,7 +9,7 @@
     <meta http-equiv="imagetoolbar" content="no" />
     <meta name="MSSmartTagsPreventParsing" content="true" />
             
-    <link rel="alternate" type="application/rss+xml" title="[% site_name %]" href="/feed/articles" />
+    <link rel="alternate" type="application/rss+xml" title="[% site_name %]" href="/Feed/articles" />
     <script type="text/javascript" src="/static/js/jquery.js"></script>
 
     [% ravlog_define_headers %]
@@ -36,7 +36,7 @@
                 <li id="blog_page" class="blog [% activelink.blog %]"><a href="/blog">Blog</a></li>
                 [% END %]
                 [% FOREACH page = c.app.pages %]
-                <li id="[% page.name %]" class="[% activelink.${c.ravlog_txt_to_url(page.name)} %]" >
+                <li id="[% page.name %]" class="[% activelink.${c.app.ravlog_txt_to_url(page.name)} %]" >
                     <a href="[% c.base_uri %]/page/[% c.app.ravlog_txt_to_url(page.name) %]">[% page.name %]</a>
                 </li>
                 [% END %]

@@ -9,7 +9,7 @@
         <h2 class="post-title">
             <a title="[% url %]" href="[% url %]">[% article.subject %]</a>
         </h2>
-        <a href="[% c.base_uri %]/feed/comments/[% url %]"><img src="/static/images/rss.png" alt="RSS" /></a> &nbsp;
+        <a href="[% c.base_uri %]/Feed/comments/[% c.app.ravlog_txt_to_url(article.subject) %]"><img src="/static/images/rss.png" alt="RSS" /></a> &nbsp;
       <br/>
         <span>Posted by [% article.user.username %]&nbsp;&nbsp;&nbsp;</span>
       <p class="post-date"> 
