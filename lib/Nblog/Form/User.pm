@@ -31,6 +31,12 @@ has_field 'email' => (
       size     => 25,
 );
 
+has_field 'is_admin' => (
+   label    => 'Is Admin',
+   type => 'Boolean',
+);
+
+
 has_field 'submit' => (
    type => 'Submit',
    value => 'Save'

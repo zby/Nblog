@@ -61,7 +61,8 @@ coerce 'Nblog::Schema::Connected'
             my $schema = Nblog::Schema->connect( @{ $_->{connect_info} } );
             if( $_->{deploy_on_start} ){
                 $schema->deploy();
-                $schema->resultset( 'User' )->create( { username => 'test', password => 'pass_for_test', email => 'root@localhost' } );
+                $schema->resultset( 'User' )->create( { username => 'test', password => 'pass_for_test', email => 'root@localhost', is_admin => 1 } );
+                $schema->resultset( 'User' )->create( { username => 'test2', password => 'pass_for_test', email => 'root@localhost' } );
                 $schema->resultset( 'Article' )->create( { subject => 'test test', body => 'test', } );
                 $schema->resultset( 'Tag' )->create( { name => 'test' } );
             }
