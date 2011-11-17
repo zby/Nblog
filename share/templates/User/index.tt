@@ -1,0 +1,13 @@
+<br>
+[% c.user.username %]
+<br>
+<br>
+[% c.user.website %]
+<br>
+<br>
+[% c.user.is_admin %]
+<br>
+<div class="post-content">
+    [% c.user.formatted_about_me %]
+</div>
+

@@ -15,7 +15,9 @@ use Module::Pluggable (
 sub _format {
     my ( $text, $type, $what ) = @_;
 
-    croak 'invalid arguments to _format' if !defined $text || !$type;
+    $text //= '';
+
+    croak 'invalid arguments to _format' if !$type;
 
     my @choices;
     foreach my $plugin ( plugins() ) {

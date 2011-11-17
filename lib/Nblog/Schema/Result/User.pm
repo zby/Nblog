@@ -41,6 +41,18 @@ __PACKAGE__->add_columns(
       is_nullable   => 1,
       size          => 255,
    },
+   "about_me",
+   {
+      data_type     => "text",
+      default_value => undef,
+      is_nullable   => 1,
+   },
+   "format",
+   {
+      data_type     => 'varchar',
+      is_nullable   => 1,
+      size          => 12,
+   },
    "email",
    {
       data_type     => "character varying",
@@ -86,6 +98,13 @@ sub insert
    my $self = shift;
    $self->created_at( DateTime->now() );
    $self->next::method(@_);
+}
+
+sub formatted_about_me {
+    my $self = shift;
+    my $format = $self->format || 'text';
+    warn Dumper( $self->about_me, $format ); use Data::Dumper;
+    return Nblog::Format::format_html( $self->about_me, $format );
 }
 
 1;
