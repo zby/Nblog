@@ -3,7 +3,7 @@ package Nblog::Form::Link;
 use HTML::FormHandler::Moose;
 
 extends 'HTML::FormHandler::Model::DBIC';
-with 'HTML::FormHandler::Render::Simple';
+with 'HTML::FormHandler::Render::Table';
 
 has_field 'name' => (
    required => 1,

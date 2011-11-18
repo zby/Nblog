@@ -6,7 +6,7 @@ use HTML::FormHandler::Types ('Email');
 use Nblog::Form::Formats;
 
 extends 'HTML::FormHandler::Model::DBIC';
-with 'HTML::FormHandler::Render::Simple';
+with 'HTML::FormHandler::Render::Table';
 
 
 has_field 'website' => (

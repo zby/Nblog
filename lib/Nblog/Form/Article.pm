@@ -3,7 +3,7 @@ package Nblog::Form::Article;
 use HTML::FormHandler::Moose;
 
 extends 'HTML::FormHandler::Model::DBIC';
-with 'HTML::FormHandler::Render::Simple';
+with 'HTML::FormHandler::Render::Table';
 
 has_field 'subject' => (
       label    => 'Subject',
@@ -29,7 +29,8 @@ has_field 'body' => (
 has_field 'submit' => ( 
       type => 'Submit',
       id => '_submit',
-      value => 'Save' 
+      value => 'Save',
+      order => 20
 );
 
 

@@ -3,7 +3,7 @@ package Nblog::Form::Comment;
 use HTML::FormHandler::Moose;
 
 extends 'HTML::FormHandler::Model::DBIC';
-with 'HTML::FormHandler::Render::Simple';
+with 'HTML::FormHandler::Render::Table';
 # with 'HTML::FormHandler::TraitFor::Captcha';
 has '+item_class' => ( default => 'Comment' );
 
