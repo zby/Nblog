@@ -103,7 +103,6 @@ sub insert
 sub formatted_about_me {
     my $self = shift;
     my $format = $self->format || 'text';
-    warn Dumper( $self->about_me, $format ); use Data::Dumper;
     return Nblog::Format::format_html( $self->about_me, $format );
 }
 

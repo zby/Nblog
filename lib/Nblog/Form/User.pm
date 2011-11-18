@@ -1,11 +1,8 @@
 package Nblog::Form::User;
 
 use HTML::FormHandler::Moose;
-use HTML::FormHandler::Types ('Email');
 
-extends 'HTML::FormHandler::Model::DBIC';
-with 'HTML::FormHandler::Render::Simple';
-
+extends 'Nblog::Form::BaseUser';
 
 has_field 'username' => (
    required => 1,
@@ -19,29 +16,10 @@ has_field 'password' => (
    size     => 25,
 );
 
-has_field 'website' => (
-   label    => 'Website',
-   size     => 25,
-);
-
-has_field 'email' => (
-      required => 1,
-      label    => 'E-Mail',
-      apply => [ Email ],
-      size     => 25,
-);
-
 has_field 'is_admin' => (
    label    => 'Is Admin',
    type => 'Boolean',
 );
-
-
-has_field 'submit' => (
-   type => 'Submit',
-   value => 'Save'
-);
-
 
 
 no HTML::FormHandler::Moose;

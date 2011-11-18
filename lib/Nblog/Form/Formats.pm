@@ -5,6 +5,7 @@ use Nblog::Format;
 
 has_field 'format' => (
       type => 'Select', required => 1,
+          order => 10,
 );
 sub options_format {
     my $self = shift;
