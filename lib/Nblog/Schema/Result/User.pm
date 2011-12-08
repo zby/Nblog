@@ -74,6 +74,13 @@ __PACKAGE__->add_columns(
       is_nullable   => 1,
       size          => 40,
    },
+   "email_token",
+   {
+      data_type     => "character",
+      default_value => undef,
+      is_nullable   => 1,
+      size          => 40,
+   },
    "is_admin",
    {
       data_type     => "character",
@@ -105,6 +112,10 @@ sub formatted_about_me {
     my $format = $self->format || 'text';
     return Nblog::Format::format_html( $self->about_me, $format );
 }
+
+sub email_confirmed { ! defined( shift->email_token ) }
+
+sub confirm_email { shift->update( { email_token => undef } ) }
 
 1;
 

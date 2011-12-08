@@ -28,6 +28,7 @@ use File::ShareDir ();
 use Cwd qw[abs_path];
 use File::Spec ();
 
+use Nblog::RegisterApp;
 
 with 'MooseX::SimpleConfig';
 
@@ -227,6 +228,7 @@ around psgi_app => sub {
     $app->map( '/static', $cascade );
     $app->map( '/favicon.ico', $favicon_c );
     $app->map( '/', $self->$orig( @_ ) );
+    $app->map( '/Register', Nblog::RegisterApp->new( renderer => $self->renderer, schema => $self->schema )->to_app );
     $app = Plack::Middleware::Auth::Form->wrap( 
         $app->to_app,
         authenticator => sub {
