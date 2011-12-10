@@ -31,14 +31,7 @@ $mech->submit_form_ok( {
     'Register user'
 );
 $mech->content_contains( 'Email sent', );
-my $user = $app->schema->resultset( 'User' )->search({ username =>  'new_user' })->first;
+my $user = $app->schema->resultset( 'User' )->search({ username =>  'new_user', email => 'test@example.com' })->first;
 ok( $user, 'User created' );
-ok( $user->email_token, 'email_token set' );
-$mech->get_ok( '/Register/confirm?username=new_user&token=aaaa', 'email token' );
-$mech->content_contains( 'Token invalid', 'invalid email token' );
-$mech->get_ok( '/Register/confirm?username=new_user&token=' . $user->email_token, 'email token' );
-$mech->content_contains( 'Email confirmed', 'email token verified' );
-$user->discard_changes;
-ok( $user->email_confirmed, 'Email confirmed' );
 
 done_testing;

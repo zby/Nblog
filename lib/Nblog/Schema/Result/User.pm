@@ -74,12 +74,12 @@ __PACKAGE__->add_columns(
       is_nullable   => 1,
       size          => 40,
    },
-   "email_token",
+   "is_email_confirmed",
    {
       data_type     => "character",
       default_value => undef,
       is_nullable   => 1,
-      size          => 40,
+      size          => 1,
    },
    "is_admin",
    {

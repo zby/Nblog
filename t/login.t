@@ -69,5 +69,6 @@ $mech->submit_form_ok( {
 my $password = $user->password;
 my $new_user = $app->schema->resultset( 'User' )->search({ username =>  'test' })->first;
 ok( $password ne $new_user->password, 'ResetPass updated password' );
+#ok( $new_user->is_email_confirmed, 'Email confirmed' );
 
 done_testing;
