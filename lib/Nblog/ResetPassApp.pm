@@ -2,7 +2,7 @@ use strict;
 use warnings;
 
 package Nblog::ResetPassApp;
-use parent 'Plack::App::ResetPass';
+use parent 'WebPrototypes::ResetPass';
 use Plack::Util::Accessor qw( schema renderer );
 
 sub find_user {
