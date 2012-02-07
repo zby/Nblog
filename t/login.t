@@ -6,6 +6,12 @@ use Nblog;
 use Test::WWW::Mechanize::PSGI;
 use Plack::Builder;
 
+my $email_log;
+local *Nblog::ResetPassApp::send_mail = sub {
+    my( $self, $mail ) = @_;
+    $email_log .= $mail->as_string;
+};
+
 my $app = Nblog->new_with_config();
 
 my $mech = Test::WWW::Mechanize::PSGI->new( app => $app->psgi_app );
@@ -52,12 +58,17 @@ $mech->submit_form_ok( {
     'ResetPass for test'
 );
 $mech->content_contains( 'Email sent', 'ResetPass for test' );
+ok( $email_log =~ /To: root\@localhost/, 'sent to root' );
 
 my $user = $app->schema->resultset( 'User' )->search({ username =>  'test' })->first;
-ok( $user->pass_token, 'pass_token set' );
+my $token = $user->pass_token;
+ok( $token, 'pass_token set' );
 $mech->get_ok( '/ResetPass/reset?name=test&token=aaaa', 'reset token' );
 $mech->content_contains( 'Token invalid', 'invalid reset token' );
-$mech->get_ok( '/ResetPass/reset?name=test&token=' . $user->pass_token, 'reset token' );
+my $link = $email_log;
+$link =~ s/.*http/http/s;
+like( $link, qr/token=$token/, 'link in email' );
+$mech->get_ok( $link, 'reset token' );
 $mech->content_contains( 'New password:<input', 'reset token verified' );
 $mech->submit_form_ok( {
         with_fields => {
