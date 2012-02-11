@@ -18,7 +18,10 @@ around 'local_dispatch' => sub {
         $res->redirect( $secure_url );
         return $res;
     }
-    if( !( $env->{user} && $env->{user}->is_admin ) ){
+    if( $env->{user} && !$env->{user}->is_admin ){
+        return $self->app->renderer->render( template => \"You have no access to this part of the site", c => $self );
+    }
+    if( !$env->{user} ){
         my $res = Plack::Response->new;
         $res->redirect( '/login' );
         $env->{'psgix.session'}{redir_to} = $env->{PATH_INFO};
