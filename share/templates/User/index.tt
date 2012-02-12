@@ -10,4 +10,4 @@
 <div class="post-content">
     [% c.user.formatted_about_me %]
 </div>
-
+<a href="[% c.user.username %]/edit">Edit</a>

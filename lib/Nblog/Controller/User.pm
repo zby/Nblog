@@ -38,6 +38,9 @@ sub index_action {
 
 sub edit_action {
     my $self = shift;
+    if( !$self->env->{user} || !( $self->env->{user}->id == $self->user->id ) ){
+        return $self->app->renderer->render( template => \"You have no access to this part of the site", c => $self );
+    }
     my $params = $self->req->parameters->as_hashref_mixed;
     my $form = Nblog::Form::BaseUser->new(
         params => $params,
