@@ -10,9 +10,14 @@ use Test::More;
 use DateTime;
 
 my $cfg = Config::Any::Perl->load( 'share/nblog_config.pl' );
-my $schema = Nblog::Schema->connect( @{ $cfg->{schema}->{connect_info} } );
-$schema->deploy();
-$schema->resultset( 'User' )->create( { username => 'test', password => 'pass_for_test' } );
+my $schema = Nblog::Schema->new_from_config( $cfg->{schema} );
+
+my $user = $schema->resultset( 'User' )->create( { username => 'test', password => 'pass_for_test' } );
+my $blog = $user->create_blog( title => 'Some blog' );
+my @contributors = $blog->contributors;
+is( $contributors[0]->id, $user->id );
+my @roles = $blog->blogs_users;
+is( $roles[0]->role, 'o' );
 
 my $time = DateTime->now;
 my $article = $schema->resultset('Article')->new_result({});

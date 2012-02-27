@@ -95,9 +95,10 @@ __PACKAGE__->add_columns(
 __PACKAGE__->set_primary_key("user_id");
 
 __PACKAGE__->has_many(
-   'articles' => 'Nblog::Schema::Result::Article',
-   'user_id'
+    'blogs_users' => 'Nblog::Schema::Result::BlogUser',
+    'user_id'
 );
+__PACKAGE__->many_to_many( 'blogs' => 'blogs_users', 'blog' );
 
 
 sub insert
@@ -116,6 +117,9 @@ sub formatted_about_me {
 sub email_confirmed { ! defined( shift->email_token ) }
 
 sub confirm_email { shift->update( { email_token => undef } ) }
+
+sub create_blog { shift->add_to_blogs( { @_ }, { role => 'o' } ) }
+
 
 1;
 
