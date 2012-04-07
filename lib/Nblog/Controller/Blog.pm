@@ -1,14 +1,46 @@
 use strict;
 use warnings;
 
-package Nblog::Controller;
+package Nblog::Controller::Blog;
+use Moose;
+use MooseX::NonMoose;
 
-use base 'WebNano::DirController';
+
+extends 'WebNano::Controller';
+
+has blog => ( is => 'ro' );
+
+sub handle {
+    my ( $class, %args ) = @_;
+    my @path = @{ delete $args{path} };
+    my $id = shift @path;
+    my $blog;
+    if( $id ){
+        my $rs = $args{app}->schema->resultset( 'Blog' );
+        $blog = $rs->search( { seo_url => $id } )->first;
+    }
+    if( ! $blog ) {
+        my $res = Plack::Response->new(404);
+        $res->content_type('text/plain');
+        $res->body( 'No blog with id: ' . $id );
+        return $res;
+    }
+    my $self = $class->new( 
+        %args, 
+        blog => $blog,
+        path => \@path,
+        self_url => $args{self_url} . "$id/",
+    );
+    return $self->local_dispatch( @path );
+};
+
 
 sub index_action {
     my $self = shift;
-    my $articles = $self->app->schema->resultset('Nblog::Schema::Result::Article')->get_latest_articles();
-    return $self->render( template => 'blog_index.tt', articles => $articles );
+    my $articles = $self->app->schema->resultset('Nblog::Schema::Result::Article')->get_latest_articles(
+        10, { blog_id => $self->blog->blog_id }
+    );
+    return $self->render( site_name => $self->blog->title, articles => $articles );
 }
 
 sub login_action {

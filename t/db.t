@@ -14,6 +14,8 @@ my $schema = Nblog::Schema->new_from_config( $cfg->{schema} );
 
 my $user = $schema->resultset( 'User' )->create( { username => 'test', password => 'pass_for_test' } );
 my $blog = $user->create_blog( title => 'Some blog' );
+is( $blog->seo_url, 'Some_blog' );
+
 my @contributors = $blog->contributors;
 is( $contributors[0]->id, $user->id );
 my @roles = $blog->blogs_users;
@@ -25,15 +27,26 @@ END{ $article->delete }
 
 ok( $article, 'new result for Article worked' );
 $article->insert;
-my $archived = $schema->resultset('Article')->archived( $time->year, $time->month );
+my $archived = $schema->resultset('Article')->archived( year => $time->year, month => $time->month );
 my $found = 0;
 while( $a = $archived->next ){
     $found = 1 if $a->id == $article->id;
 }
 ok( $found, 'archived' );
 
-my ( $article1 ) = $schema->resultset('Article')->get_latest_articles;
-is( ref $article1, 'Nblog::Schema::Result::Article', 'get_latest_articles' );
+$blog->add_to_articles( { subject => 'test test', body => 'test', } );
+my @archived = $schema->resultset('Article')->archived( 
+    year => $time->year,
+    month => $time->month,
+    restriction => { blog_id => $blog->blog_id },
+);
+is( ref $archived[0], 'Nblog::Schema::Result::Article', 'archived for a blog' );
+is( scalar @archived, 1, 'archived for a blog' );
+
+my @articles = $schema->resultset('Article')->get_latest_articles( 10, { blog_id => $blog->blog_id } );
+is( ref $articles[0], 'Nblog::Schema::Result::Article', 'get_latest_articles' );
+is( scalar @articles, 1, 'get_latest_articles for a blog' );
+
 
 done_testing;
 

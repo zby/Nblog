@@ -24,6 +24,11 @@ __PACKAGE__->add_columns(
       is_nullable   => 1,
       size          => 255,
    },
+   'seo_url' => { 
+      data_type     => "character varying",
+      is_nullable   => 0,
+      size          => 255,
+   },
    "intro",
    {
       data_type     => "text",
@@ -54,6 +59,7 @@ __PACKAGE__->add_columns(
 );
 
 __PACKAGE__->set_primary_key("blog_id");
+__PACKAGE__->add_unique_constraint( seo_url => [ 'seo_url' ], );
 __PACKAGE__->has_many(
    'articles' => 'Nblog::Schema::Result::Article',
    'blog_id'
@@ -65,6 +71,19 @@ __PACKAGE__->has_many(
 );
 __PACKAGE__->many_to_many( 'contributors' => 'blogs_users', 'user' );
 
+sub path_from_title {
+    my( $class, $title ) = @_;
+    $title =~ s/ /_/g;
+    return $title;
+}
+
+sub new {
+    my ( $class, $attrs ) = @_;
+
+    $attrs->{seo_url} = $class->path_from_title( $attrs->{title} ) unless defined $attrs->{seo_url};
+    my $new = $class->next::method($attrs);
+    return $new;
+}
 
 sub formatted_intro {
     my $self = shift;

@@ -1,16 +1,20 @@
 <br />
-    [% article.subject %]
+[% IF articles.count == 0 %]
+<p>No matching articles found</p>
+[% END %]
+[% WHILE ( article = articles.next ) %]
     <div class="post">
-    [% url = '/' _ c.app.ravlog_txt_to_url(article.subject, article.id) %]
+    [% url = '/Article/' _ c.app.ravlog_txt_to_url(article.subject, article.id) %]
     <div class="post-info">
         <h2 class="post-title">
-            <a title="[% c.uri_for(url) %]" href="[% url %]">[% article.subject %]</a>
+            <a title="[% url %]" href="[% url %]">[% article.subject %]</a>
         </h2>
         <a href="[% c.base_uri %]/Feed/comments/[% c.app.ravlog_txt_to_url(article.subject) %]"><img src="/static/images/rss.png" alt="RSS" /></a> &nbsp;
       <br/>
-        <span>Posted in <a href="/Blog/[% article.blog.seo_url %]">[% article.blog.title %]</a>&nbsp;&nbsp;&nbsp;</span>
+      [% article.blog %]
+        <span>Posted by [% article.blog.user.username %]&nbsp;&nbsp;&nbsp;</span>
       <p class="post-date"> 
-         [% c.render_ravlog_date(article.created_at) %]
+         [% c.app.render_ravlog_date(article.created_at) %]
       </p>
     </div>
     
@@ -29,7 +33,7 @@
     </div>
     <br />
    <br />
-
+[% END %]
 <div id="comments"></div>
 
 <ol class="commentlist">

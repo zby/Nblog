@@ -3,37 +3,37 @@ use base 'DBIx::Class::ResultSet';
 
 sub get_latest_articles
 {
-   my ( $self, $number_of_posts ) = @_;
-   my $rows = 10;
-   $rows = $number_of_posts if defined $number_of_posts;
-   return $self->search( undef, { rows => $rows, order_by => 'article_id desc' } );
+   my ( $self, $rows, $restriction ) = @_;
+   $rows = 10 if not defined $rows;
+   return $self->search( $restriction, { rows => $rows, order_by => 'article_id desc' } );
 }
 
-sub archived
-{
-   my ( $self, $year, $month, $day ) = @_;
+sub archived {
+   my ( $self, %params ) = @_;
 
+   my $day = $params->{day};
    my $lastday;
    if( defined $day ) {
        $lastday = $day;
    }
    else {
       $day = 1;
-      $lastday = DateTime->last_day_of_month( year => $year, month => $month )->day;
-
+      $lastday = DateTime->last_day_of_month( year => $params{year}, month => $params{month} )->day;
    }
    $day   = sprintf '%02d', $day;
    $lastday   = sprintf '%02d', $lastday;
-   $month = sprintf '%02d', $month;
+   my $month = sprintf '%02d', $params{month};
+   my $year  = $params{year};
+    
    return $self->search(
      {
         created_at => {
            -between => [ "$year-$month-$day 00:00:00", "$year-$month-$lastday 23:59:59" ]
-        }
+        },
+        %{ $params{restriction} },
      },
      { order_by => 'article_id desc' }
    );
-
 }
 
 sub from_month
