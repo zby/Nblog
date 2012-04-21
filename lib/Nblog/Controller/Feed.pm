@@ -11,6 +11,13 @@ extends 'WebNano::Controller';
 use XML::Feed;
 use Text::Textile qw(textile);
 
+sub artile_rs { $_[0]->app->schema->resultset( 'Article' ) }
+
+sub comment_rs { $_[0]->app->schema->resultset( 'Comment' ) }
+
+sub tag_rs { $_[0]->app->schema->resultset( 'Tag' ) }
+
+
 sub comments_action {
    my ( $self, $subject ) = @_;
 
@@ -22,12 +29,12 @@ sub comments_action {
    my @comments;
    if ( !defined $subject )
    {
-      @comments = $self->app->schema->resultset( 'Comment' )->all();
+      @comments = $self->comment_rs->all();
    }
    else
    {
       @comments =
-         $self->app->schema->resultset( 'Article' )
+         $self->article_rs
          ->search( { subject => { like => $self->app->ravlog_url_to_query($subject) } } )->first()
          ->comments();
    }
@@ -60,12 +67,12 @@ sub articles_action {
    my @articles;
    if ( !defined $tag )
    {
-      @articles = $self->app->schema->resultset('Article')->get_latest_articles();
+      @articles = $self->article_rs->get_latest_articles();
    }
    else
    {
       @articles =
-         $self->app->schema->resultset('Tag')
+         $self->tag_rs
          ->search( { name => { like => $self->app->ravlog_url_to_query($tag) } } )->first()->articles();
    }
 

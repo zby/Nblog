@@ -42,6 +42,15 @@ my @archived = $schema->resultset('Article')->archived(
 );
 is( ref $archived[0], 'Nblog::Schema::Result::Article', 'archived for a blog' );
 is( scalar @archived, 1, 'archived for a blog' );
+$archived[0]->add_to_comments( { body => 'aaa' } );
+my @comments = $blog->comments;
+is( ref $comments[0], 'Nblog::Schema::Result::Comment', '$blog->comments' );
+is( scalar @comments, 1, '$blog->comments' );
+$archived[0]->add_to_tags( { name => 'bbb' } );
+my @tags = $blog->tags;
+is( ref $tags[0], 'Nblog::Schema::Result::Tag', '$blog->tags' );
+is( scalar @tags, 1, '$blog->tags' );
+
 
 my @articles = $schema->resultset('Article')->get_latest_articles( 10, { blog_id => $blog->blog_id } );
 is( ref $articles[0], 'Nblog::Schema::Result::Article', 'get_latest_articles' );

@@ -4,7 +4,7 @@ use warnings;
 package Nblog::Controller::Blog;
 use Moose;
 use MooseX::NonMoose;
-
+use Nblog::Controller::Blog::Feed;
 
 extends 'WebNano::Controller';
 
@@ -178,6 +178,18 @@ sub page_action {
        activelink => { $name => 'activelink' },
    )
 }
+
+sub feed_action {
+    my ( $self, $action ) = @_;
+    Nblog::Controller::Blog::Feed->handle(
+         path => [ $action ],
+         self_url  => $self->self_url . 'feed/',
+         app => $self->app,
+         blog => $self->blog,
+    );
+}
+
+
 
 
 1;

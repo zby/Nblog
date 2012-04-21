@@ -65,6 +65,36 @@ __PACKAGE__->has_many(
    'blog_id'
 );
 
+sub comments {
+    my ( $self, $args ) = @_;
+    my $schema = $self->result_source->schema;
+    my %search = ( 'blog.blog_id' => $self->id );
+    if( $args ){
+        %search = ( %search, %$args );
+    }
+    return $schema->resultset('Comment')->search(
+        \%search,
+        { 
+            join => { article => 'blog' },
+        }
+    );
+}
+
+sub tags {
+    my ( $self, $args ) = @_;
+    my $schema = $self->result_source->schema;
+    my %search = ( 'blog.blog_id' => $self->id );
+    if( $args ){
+        %search = ( %search, %$args );
+    }
+    return $schema->resultset('Tag')->search(
+        \%search,
+        { 
+            join => { tags_articles => { article => 'blog' } },
+        }
+    );
+}
+
 __PACKAGE__->has_many(
    'blogs_users' => 'Nblog::Schema::Result::BlogUser',
    'blog_id'

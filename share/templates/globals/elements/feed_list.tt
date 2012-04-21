@@ -1,7 +1,7 @@
 <h2>Feeds</h2>
 <ul>
-<li><a href="/Feed/articles"><img src="/static/images/rss.png" alt="RSS" /> Articles</a></li>
-<li><a href="/Feed/comments"><img src="/static/images/rss.png" alt="RSS" /> Comments</a></li>
+<li><a href="[% IF c.myroot; c.myroot _ 'feed'; ELSE; '/Feed'; END %]/articles"><img src="/static/images/rss.png" alt="RSS" /> Articles</a></li>
+<li><a href="[% IF c.myroot; c.myroot _ 'feed'; ELSE; '/Feed'; END %]/comments"><img src="/static/images/rss.png" alt="RSS" /> Comments</a></li>
 
 [% IF rss %]
 <li><a href="/Feed/articles/[% c.app.ravlog_txt_to_url(rss) %]"><img src="/static/images/rss.png" alt="RSS" /> [% rss %]</a></li>
