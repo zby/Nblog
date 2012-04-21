@@ -43,23 +43,83 @@ sub index_action {
     return $self->render( site_name => $self->blog->title, articles => $articles );
 }
 
-sub login_action {
-    my $self = shift;
-    my $env = $self->env;
-    return $self->render( 
-        template => 'login.tt',
-        redir_to => $env->{'psgix.session'}{redir_to},
-    );
+sub myroot { $_[0]->self_url }
+
+sub calendar {
+   my ( $self ) = @_;
+
+   my $dt  = DateTime->now();
+   my $cal = new Nblog::Calendar(
+      'year'  => $dt->year,
+      'month' => $dt->month
+   );
+   $cal->border(0);
+   $cal->width(50);
+   $cal->headerclass('month_date');
+   $cal->showweekdayheaders(0);
+
+   my @articles = $self->app->schema->resultset('Article')->search( { blog_id => $self->blog->blog_id } )->from_month( $dt->month );
+
+   foreach my $article (@articles)
+   { 
+      my $location =
+         $self->self_url
+         . 'archived/'
+         . $article->created_at->year() . '/'
+         . $article->created_at->month() . '/'
+         . $article->created_at->mday();
+      $cal->setdatehref( $article->created_at->mday(), $location );
+   }
+
+   return $cal->as_HTML;
 }
 
+sub archives
+{
+   my ( $self ) = @_;
+
+   my @articles = $self->app->schema->resultset('Article')->search( { blog_id => $self->blog->blog_id } )->all();
+
+   unless (@articles)
+   { 
+      return "<p>No Articles in Archive!</p>";
+   }
+
+   my $months;
+   foreach my $article (@articles)
+   { 
+      my $month = $article->created_at()->month_name();
+      my $year  = $article->created_at()->year();
+      my $key   = "$year $month";
+      if ( ( defined $months->{$key}->{count} ) && ( $months->{$key}->{count} > 0 ) )
+      { 
+         $months->{$key}->{count} += 1;
+      }
+      else
+      {
+         $months->{$key}->{count} = 1;
+         $months->{$key}->{year}  = $year;
+         $months->{$key}->{month} = $article->created_at()->month();
+      }
+   }
+
+   my @out;
+   while ( my ( $key, $value ) = each( %{$months} ) )
+   {
+      push @out,
+         "<li><a href='" . $self->self_url . "archived/$value->{year}/$value->{month}'>$key</a> <span class='special_text'>($value->{count})</span></li>";
+   }
+   return join( ' ', @out );
+}
 
 sub archived_action {
     my ( $self, $year, $month, $day ) = @_;
 
-    my $articles = $self->app->schema->resultset('Article')->archived( year => $year, month => $month, day => $day );
+    my $articles = $self->app->schema->resultset('Article')->search( { blog_id => $self->blog->blog_id } )->archived( year => $year, month => $month, day => $day );
     return $self->render( 
-        template => 'blog_index.tt',
+        template => 'index.tt',
         articles => $articles,
+        site_name => $self->blog->title,
     );
 }
 
@@ -72,7 +132,7 @@ sub search_action {
       $phrase = $self->req->param( 'phrase' );
    }
 
-   my $articles = $self->app->schema->resultset('Article')->search(
+   my $articles = $self->app->schema->resultset('Article')->search( { blog_id => $self->blog->blog_id } )->search(
       [
          subject => { like => "%$phrase%" },
          body    => { like => "%$phrase%" },
@@ -80,8 +140,9 @@ sub search_action {
    );
 
    return $self->render( 
-       template => 'blog_index.tt',
+       template => 'index.tt',
        articles => $articles,
+       site_name => $self->blog->title,
    )
 }
 
@@ -93,9 +154,10 @@ sub tag_action {
       ->search( { name => { like => $self->app->ravlog_url_to_query($tag) } } )->first();
    warn $db_tag->id;
    return $self->render(
-       template => 'blog_index.tt',
-       articles => scalar $db_tag->articles,
+       template => 'index.tt',
+       articles => scalar $db_tag->articles->search( { blog_id => $self->blog->blog_id } ),
        rss      => $db_tag->name,
+       site_name => $self->blog->title,
    );
 }
 

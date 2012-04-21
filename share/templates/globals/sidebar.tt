@@ -14,7 +14,7 @@
     [% PROCESS 'elements/login_list.tt' %]
     <h3>Calendar</h3>
             <div id="calendar">
-                    [% c.app.calendar %]
+                    [% c.calendar OR c.app.calendar %]
             </div>
     <h3>Tags</h3>
     [% PROCESS 'elements/tags_list.tt' %]
