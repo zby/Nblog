@@ -13,14 +13,15 @@ use Nblog::Form::Comment;
 has article => ( is => 'rw' );
 
 around local_dispatch => sub {
-    my ( $orig, $self, $title, @args ) = @_;
+    my ( $orig, $self, ) = @_;
+    my $title = shift @{ $self->path };
     $title = uri_unescape( $title );
     my $app = $self->app;
     my $article = $app->schema->resultset('Article')
         ->search( { 'subject' => { like => $app->ravlog_url_to_query($title) } } )->first;
     if( $article ){
         $self->article( $article );
-        $self->$orig( @args );
+        $self->$orig();
     }
     else{
         my $res = Plack::Response->new(404);

@@ -6,7 +6,9 @@ use Moose;
 use MooseX::NonMoose;
 use Plack::Response;
 
-extends 'WebNano::DirController';
+extends 'WebNano::Controller';
+
+sub search_subcontrollers { 1 }
 
 around 'local_dispatch' => sub {
     my $orig = shift;
